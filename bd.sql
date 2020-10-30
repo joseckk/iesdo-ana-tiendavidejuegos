@@ -10,7 +10,7 @@ CREATE TABLE videojuegos
         id          bigserial        PRIMARY KEY
     ,   video_tipo  varchar(255)     NOT NULL
     ,   vnombre     varchar(255)     NOT NULL UNIQUE
-    ,   pegi        numeric(2)       
+    ,   pegi        numeric(2)       NOT NULL
 );
 
 

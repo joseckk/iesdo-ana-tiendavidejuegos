@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Videojuegos</title>
+    <style>
+        .borrar {
+            display: inline;
+        }
+    </style>
 </head>
 <body>
     
@@ -25,7 +30,7 @@
 
     <?php 
 
-        $pdo = new PDO('pgsql:host=localhost;dbname=bd', 'jose', 'jose');
+        $pdo = conectar();
 
         if ($video_tipo == '') {
 
@@ -50,16 +55,18 @@
             <th>ACCIONES</th>
         </thead>
         <tbody>
-            <?php foreach($sent as $fila): ?>
+            <?php foreach($sent as $fila): 
+                $id = $fila['id'] ?>
                 <tr>
                     <td><?= $fila['video_tipo'] ?></td>
                     <td><?= $fila['vnombre'] ?></td>
                     <td><?= $fila['pegi'] ?></td>
                     <td>
-                        <form action="borrar.php" method="post">
-                            <input type="hidden" name="id" value="<?= $fila['id'] ?>">
+                        <form action="borrar.php" method="post" class="borrar">
+                            <input type="hidden" name="id" value="<?= $id ?>">
                             <button type="submit">borrar</button>
                         </form>
+                        <a href="modificar.php?id=<?= $id ?>">modificar</a>
                     </td>
                 </tr>
             <?php endforeach ?>
