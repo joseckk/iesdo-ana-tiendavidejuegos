@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,6 +11,7 @@
     <?php
     require '../comunes/auxiliar.php';
 
+    head();
 
     $cod_postal = recoger_post('cod_postal');
     $loc = recoger_post('loc');
@@ -73,7 +75,8 @@
                               , 'loc'=> $loc
                               , 'tnombre'=> $tnombre
                               , 'id'=> $id]);
-
+                              
+                $_SESSION['flash'] = 'Se ha modificado la fila correctamente';
                 volver();
             } catch (PDOException $e) {
                 error('No se ha podido modificar la fila.');

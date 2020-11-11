@@ -1,14 +1,7 @@
 <?php
 
-    function cookies() {
-
-        if (isset($_COOKIE['borrar'])) {
-            setcookie('borrar', '', 1); ?>
-            <h3>Se ha eliminado una fila correctamente</h3><?php
-        } 
-    }
-
-    function banner() {
+    function banner() 
+    {
         if (!isset($_COOKIE['acepta_cookies'])) {?>
             <h3>
                 Este sitio usa cookies
@@ -17,7 +10,8 @@
         } 
     }
 
-    function error($mensaje){?>
+    function error($mensaje)
+    {?>
         <h3><?= $mensaje ?></h3><?php
         return true;
     }
@@ -49,7 +43,8 @@
         return $sent->fetchColumn() != 0;
     }
 
-    function existe_cod_postal_otra_fila($cod_postal, $pdo, $id) {
+    function existe_cod_postal_otra_fila($cod_postal, $pdo, $id) 
+    {
         $sent = $pdo->prepare('SELECT COUNT(*)
                                  FROM tienda
                                 WHERE cod_postal = :cod_postal
@@ -60,7 +55,8 @@
         return $sent->fetchColumn() != 0;
     }
 
-    function conectar() {
+    function conectar() 
+    {
 
         $pdo = new PDO('pgsql:host=localhost;dbname=bd', 'joseka', 'joseka');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -68,11 +64,13 @@
         return $pdo;
     }
 
-    function volver() {
+    function volver() 
+    {
         header('Location: index.php');
     }
 
-    function mostrar_errores($error) {
+    function mostrar_errores($error) 
+    {
                    
         foreach ($error as $key => $array) {
             foreach ($array as $value) {?>
@@ -82,6 +80,21 @@
         }
     }
 
-    function cancelar(){?>
+    function cancelar()
+    {?>
         <a href="index.php">Volver</a><?php
+    }
+
+    function flash()
+    {
+        if (isset($_SESSION['flash'])) {
+            echo "<h3>{$_SESSION['flash']}</h3>";
+            unset($_SESSION['flash']);
+        }
+    }
+
+    function head()
+    {
+        banner();
+        flash();
     }

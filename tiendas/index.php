@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,9 +16,7 @@
     <?php
     require '../comunes/auxiliar.php';
 
-    banner();
-    cookies();
-    
+    head();
     
     $cod_postal = recoger_get('cod_postal');
     
@@ -63,16 +62,16 @@
                     <td><?= $fila['loc'] ?></td>
                     <td><?= $fila['tnombre'] ?></td>
                     <td>
-                        <form action="tiendas/borrar.php" method="post" class="borrar">
+                        <form action="/tiendas/borrar.php" method="post" class="borrar">
                             <input type="hidden" name="id" value="<?= $id ?>">
                             <button type="submit">borrar</button>
                         </form>
-                        <a href="tiendas/modificar.php?id=<?= $id ?>">modificar</a>
+                        <a href="/tiendas/modificar.php?id=<?= $id ?>">modificar</a>
                     </td>
                 </tr>
             <?php endforeach ?>
         </tbody>
     </table> <br>
-    <a href="tiendas/insertar.php">Insertar una nueva tienda</a>
+    <a href="/tiendas/insertar.php">Insertar una nueva tienda</a>
 </body>
 </html>
