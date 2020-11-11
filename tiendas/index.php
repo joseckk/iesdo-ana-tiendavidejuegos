@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Videojuegos</title>
+    <title>Tiendas</title>
     <style>
         .borrar {
             display: inline;
@@ -13,18 +13,19 @@
 <body>
     
     <?php
-    require './auxiliar.php';
+    require '../comunes/auxiliar.php';
+
     banner();
-    cookie();
-
-    $video_tipo = isset($_GET['video_tipo']) ? trim($_GET['video_tipo']) : null;
+    cookies();
     
-
+    
+    $cod_postal = recoger_get('cod_postal');
+    
     ?>
 
     <form action="" method="get">
-        <label for="video_tipo">Tipo de videojuego:</label>
-        <input type="text" name="video_tipo" id="video_tipo" value="<?= $video_tipo ?>">
+        <label for="cod_postal">Código Postal:</label>
+        <input type="text" name="cod_postal" id="cod_postal" value="<?= $cod_postal ?>">
         <button type="submit">buscar</button>
     </form> <br>
 
@@ -32,16 +33,16 @@
 
         $pdo = conectar();
 
-        if ($video_tipo == '') {
+        if ($cod_postal == '') {
 
-            $sent = $pdo->query("SELECT * FROM videojuegos");
+            $sent = $pdo->query("SELECT * FROM tienda");
 
         } else {
 
             $sent = $pdo->prepare("SELECT *
-                                     FROM videojuegos
-                                    WHERE video_tipo = :video_tipo");
-            $sent->execute([':video_tipo' => $video_tipo]);
+                                     FROM tienda
+                                    WHERE cod_postal = :cod_postal");
+            $sent->execute([':cod_postal' => $cod_postal]);
 
         }
     
@@ -49,18 +50,18 @@
 
     <table border="1">
         <thead>
-            <th>TIPO</th>
+            <th>CÓDIGO POSTAL</th>
+            <th>LOCALIDAD</th>
             <th>NOMBRE</th>
-            <th>PEGI</th>
             <th>ACCIONES</th>
         </thead>
         <tbody>
             <?php foreach($sent as $fila): 
                 $id = $fila['id'] ?>
                 <tr>
-                    <td><?= $fila['video_tipo'] ?></td>
-                    <td><?= $fila['vnombre'] ?></td>
-                    <td><?= $fila['pegi'] ?></td>
+                    <td><?= $fila['cod_postal'] ?></td>
+                    <td><?= $fila['loc'] ?></td>
+                    <td><?= $fila['tnombre'] ?></td>
                     <td>
                         <form action="borrar.php" method="post" class="borrar">
                             <input type="hidden" name="id" value="<?= $id ?>">
@@ -72,6 +73,6 @@
             <?php endforeach ?>
         </tbody>
     </table> <br>
-    <a href="insertar.php">Insertar un nuevo videojuego</a>
+    <a href="insertar.php">Insertar una nueva tienda</a>
 </body>
 </html>

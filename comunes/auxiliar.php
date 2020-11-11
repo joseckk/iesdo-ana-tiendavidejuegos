@@ -1,6 +1,6 @@
 <?php
 
-    function cookie() {
+    function cookies() {
 
         if (isset($_COOKIE['borrar'])) {
             setcookie('borrar', '', 1); ?>
@@ -22,8 +22,25 @@
         return true;
     }
 
-    function existe_vnombre($vnombre, $pdo) {
+    function recoger($tipo, $nombre)
+    {
+        return filter_input($tipo, $nombre, FILTER_CALLBACK, [
+            'options' => 'trim'
+        ]);
+    }
+    
+    function recoger_get($nombre)
+    {
+        return recoger(INPUT_GET, $nombre);
+    }
+    
+    function recoger_post($nombre)
+    {
+        return recoger(INPUT_POST, $nombre);
+    }
 
+    function existe_vnombre($vnombre, $pdo) 
+    {
         $sent = $pdo->prepare('SELECT COUNT(*)
                                  FROM videojuegos
                                 WHERE vnombre = :vnombre');
@@ -45,7 +62,7 @@
 
     function conectar() {
 
-        $pdo = new PDO('pgsql:host=localhost;dbname=bd', 'jose', 'jose');
+        $pdo = new PDO('pgsql:host=localhost;dbname=bd', 'joseka', 'joseka');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         return $pdo;
