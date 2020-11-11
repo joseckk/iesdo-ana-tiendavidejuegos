@@ -39,12 +39,12 @@
         return recoger(INPUT_POST, $nombre);
     }
 
-    function existe_vnombre($vnombre, $pdo) 
+    function existe_cod_postal($cod_postal, $pdo) 
     {
         $sent = $pdo->prepare('SELECT COUNT(*)
-                                 FROM videojuegos
-                                WHERE vnombre = :vnombre');
-        $sent->execute(['vnombre' => $vnombre]);
+                                 FROM tienda
+                                WHERE cod_postal = :cod_postal');
+        $sent->execute(['cod_postal' => $cod_postal]);
        
         return $sent->fetchColumn() != 0;
     }
