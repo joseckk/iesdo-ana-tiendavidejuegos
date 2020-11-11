@@ -49,12 +49,12 @@
         return $sent->fetchColumn() != 0;
     }
 
-    function existe_mismo_vnombre($vnombre, $pdo, $id) {
+    function existe_cod_postal_otra_fila($cod_postal, $pdo, $id) {
         $sent = $pdo->prepare('SELECT COUNT(*)
-                                 FROM videojuegos
-                                WHERE vnombre = :vnombre
+                                 FROM tienda
+                                WHERE cod_postal = :cod_postal
                                   AND id != :id');
-        $sent->execute([ 'vnombre' => $vnombre
+        $sent->execute([ 'cod_postal' => $cod_postal
                         ,'id'      => $id]);
 
         return $sent->fetchColumn() != 0;

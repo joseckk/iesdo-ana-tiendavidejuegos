@@ -63,16 +63,16 @@
                     <td><?= $fila['loc'] ?></td>
                     <td><?= $fila['tnombre'] ?></td>
                     <td>
-                        <form action="borrar.php" method="post" class="borrar">
+                        <form action="tiendas/borrar.php" method="post" class="borrar">
                             <input type="hidden" name="id" value="<?= $id ?>">
                             <button type="submit">borrar</button>
                         </form>
-                        <a href="modificar.php?id=<?= $id ?>">modificar</a>
+                        <a href="tiendas/modificar.php?id=<?= $id ?>">modificar</a>
                     </td>
                 </tr>
             <?php endforeach ?>
         </tbody>
     </table> <br>
-    <a href="insertar.php">Insertar una nueva tienda</a>
+    <a href="tiendas/insertar.php">Insertar una nueva tienda</a>
 </body>
 </html>
