@@ -69,6 +69,71 @@
         return $tnombre;
     }
 
+    function comprobar_disponibilidad($vnombre, $pdo) 
+    {
+        $sent = $pdo->prepare('SELECT *
+                                 FROM videojuego
+                                WHERE vnombre = :vnombre
+                                  AND usuario_id == null');
+        $sent->execute(['vnombre' => $vnombre]);
+
+        return $sent->fetchColumn() != 0;
+    }
+
+    function existe_usuario($usuario_id, $pdo)
+    {
+        $sent = $pdo->prepare('SELECT *
+                                 FROM usuario
+                                WHERE id = :usuario_id');
+        $sent->execute(['usuario_id' => $usuario_id]);
+
+        return $sent->fetchColumn() != 0;
+    }
+
+    function existe_tienda($tienda_id, $pdo)
+    {
+        $sent = $pdo->prepare('SELECT *
+                                 FROM tienda
+                                WHERE id = :tienda_id');
+        $sent->execute(['tienda_id' => $tienda_id]);
+
+        return $sent->fetchColumn() != 0;
+    }
+
+    function lista_usuarios($pdo)
+    {
+        $sent = $pdo->query('SELECT id, login
+                               FROM usuario
+                           ORDER BY id');
+        $ret = [];
+        
+        foreach ($sent as $fila) {
+            if ($fila['login'] != 'admin')
+                $ret[$fila['id']] = "{$fila['login']}";
+        }
+
+        return $ret;
+    }
+
+    function lista_tiendas($pdo)
+    {
+        $sent = $pdo->query('SELECT id, cod_postal, tnombre
+                               FROM tienda
+                           ORDER BY cod_postal');
+        $ret = [];
+        
+        foreach ($sent as $fila) {
+            $ret[$fila['id']] = "({$fila['cod_postal']}) {$fila['tnombre']}";
+        }
+
+        return $ret;
+    }
+
+    function selected($a, $b)
+    {
+        return ($a == $b) ? 'selected' : '';
+    }
+
     function conectar() 
     {
 
@@ -80,7 +145,7 @@
 
     function volver() 
     {
-        header('Location: index.php');
+        header('Location: ../index.php');
     }
 
     function mostrar_errores($error) 
