@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insertar un nuevo videojuego</title>
+    <title>Modificar un videojuego</title>
 </head>
 <body>
     
@@ -25,6 +25,31 @@
         'tienda_id' => 'Tienda', 
     ];
 
+    $id = recoger_get('id');
+
+    if (!isset($id)) {
+        volver();
+    } else {
+        $pdo = conectar();
+        $sent = $pdo->prepare("SELECT id
+                                    , video_tipo
+                                    , vnombre
+                                    , precio
+                                    , pegi
+                                    , to_char(fecha_alt, 'DD-MM-YYYY') AS fecha_alt
+                                    , to_char(fecha_baj, 'DD-MM-YYYY') AS fecha_baj
+                                    , disponibilidad
+                                    , usuario_id
+                                    , tienda_id
+                                FROM videojuego
+                                WHERE id = :id");
+        $sent->execute(['id' => $id]);
+        $fila = $sent->fetch();
+        if ($fila === false) {
+            volver();
+        }
+    }
+
     foreach (PAR as $k => $v) {
         $$k = recoger_post($k);
         $tmp = $k . '_fmt';
@@ -32,8 +57,6 @@
     }
 
     unset($tmp);
-
-    $pdo = conectar();
     
     $existen = true;
 
@@ -109,7 +132,6 @@
                 if (!checkdate($mes, $dia, $anyo)) {
                     $error['fecha_alt'][] = 'La fecha es incorrecta';
                 } else {
-                    $fecha_alt_fmt = $fecha_alt;
                     $fecha_alt = "$anyo-$mes-$dia";
                 }
             }
@@ -131,7 +153,6 @@
                 if (!checkdate($mes, $dia, $anyo)) {
                     $error['fecha_baj'][] = 'La fecha es incorrecta';
                 } else {
-                    $fecha_baj_fmt = $fecha_baj;
                     $fecha_baj = "$anyo-$mes-$dia";
                 }
             }
@@ -144,11 +165,7 @@
                 $disponibilidad = true;
             } elseif ($disponibilidad == 'false') {
                 $disponibilidad = false;
-            } else {
-                if (!comprobar_disponibilidad($vnombre, $pdo)) {
-                    $error['disponibilidad'][] = 'El videojuego ya está alquilado';
-                }
-            }
+            } 
         }
 
         if ($usuario_id == '') {
@@ -167,23 +184,24 @@
             }
         }
 
-        // Insertar fila
+        // Modificar fila
         if ($error === $error_vacio) {
             try {
-                $columnas = implode(', ', array_keys(PAR));
                 $marcadores = [];
                 foreach (PAR as $k => $v) {
-                    $marcadores[] = ":$k";
+                    $marcadores[] = "$k = :$k";
                 }
                 $marcadores = implode(', ', $marcadores);
-                $sent = $pdo->prepare("INSERT INTO videojuego ($columnas)
-                                       VALUES ($marcadores)");
+                $sent = $pdo->prepare("UPDATE videojuego 
+                                          SET $marcadores
+                                        WHERE id = :id");
                 $execute = [];
                 foreach (PAR as $k => $v) {
                     $execute[$k] = $$k;
                 }
+                $execute['id'] = $id;
                 $sent->execute($execute);
-                $_SESSION['flash'] = 'La fila se ha insertado correctamente.';
+                $_SESSION['flash'] = 'La fila se ha modificado correctamente.';
                 volver();
 
             } catch (PDOException $e) {
@@ -192,6 +210,19 @@
         } else {
                 mostrar_errores($error);
             } 
+    } else {
+        if (isset($id)) {
+
+                $video_tipo_fmt = $fila['video_tipo'];
+                $vnombre_fmt = $fila['vnombre'];
+                $precio_fmt = $fila['precio'];
+                $pegi_fmt = $fila['pegi'];
+                $fecha_alt_fmt = $fila['fecha_alt'];
+                $fecha_baj_fmt = $fila['fecha_baj'];
+                $disponibilidad = $fila['disponibilidad'];
+                $usuario_id = $fila['usuario_id'];
+                $tienda_id = $fila['tienda_id'];
+        }
     }
     
     ?>
@@ -200,22 +231,22 @@
         <p>
             <label for="video_tipo">Tipo:</label>
             <input type="text" name="video_tipo" id="video_tipo" 
-                    value="<?= $video_tipo ?>">
+                    value="<?= $video_tipo_fmt ?>">
         </p>
         <p>
             <label for="vnombre">Nombre:</label>
             <input type="text" name="vnombre" id="vnombre" 
-                    value="<?= $vnombre ?>">
+                    value="<?= $vnombre_fmt ?>">
         </p>
         <p>
             <label for="precio">Precio:</label>
             <input type="text" name="precio" id="precio" 
-                    value="<?= $precio ?>">
+                    value="<?= $precio_fmt ?>">
         </p>
         <p>
             <label for="pegi">Pegi:</label>
             <input type="text" name="pegi" id="pegi" 
-                    value="<?= $pegi ?>">
+                    value="<?= $pegi_fmt ?>">
         </p>
         <p>
             <label for="fecha_alt">Fecha de alta:</label>
@@ -231,8 +262,8 @@
             <label for="disponibilidad">Disponibilidad:</label>
             <select name="disponibilidad" id="disponibilidad">
                 <option value="<?= '' ?>"></option>
-                <option value= true >stock</option>
-                <option value= false >sin fecha de entrada</option>
+                <option value= true <?= selected($disponibilidad, '1') ?>>stock</option>
+                <option value= false <?= selected($disponibilidad, '0') ?>>sin fecha de entrada</option>
             </select>
         </p>
         <p>
@@ -257,7 +288,7 @@
                 <?php endforeach ?>
             </select>
         </p>
-        <button type="submit">Insertar</button>
+        <button type="submit">Modificar</button>
         <?php cancelar() ?>
     </form>
 </body>
