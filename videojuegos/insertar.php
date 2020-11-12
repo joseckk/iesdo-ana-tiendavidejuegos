@@ -144,11 +144,7 @@
                 $disponibilidad = true;
             } elseif ($disponibilidad == 'false') {
                 $disponibilidad = false;
-            } else {
-                if (!comprobar_disponibilidad($vnombre, $pdo)) {
-                    $error['disponibilidad'][] = 'El videojuego ya está alquilado';
-                }
-            }
+            } 
         }
 
         if ($usuario_id == '') {

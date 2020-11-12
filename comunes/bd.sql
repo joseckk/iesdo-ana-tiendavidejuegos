@@ -53,8 +53,8 @@ VALUES (11550, 'CHIPIONA', 'VIDEO-MANIA')
 
 INSERT INTO videojuego (video_tipo, vnombre, precio, pegi, 
                         fecha_alt, fecha_baj, disponibilidad, usuario_id, tienda_id)
-VALUES ('ESPIONAJE', 'Metal Gear Solid', 59.99, NULL, '2015-06-02 18:23:15', NULL, true, 2, 3)
-     , ('ROL', 'Final Fantasy', 30.00, 3, '2020-06-02 20:23:15', NULL, true, 3, 1)
+VALUES ('ESPIONAJE', 'Metal Gear Solid', 59.99, NULL, '2015-06-02 18:23:15', NULL, false, 2, 3)
+     , ('ROL', 'Final Fantasy', 30.00, 3, '2020-06-02 20:23:15', NULL, false, 3, 1)
      , ('SIMULACIÓN', 'Gran Turismo', 45.50, 3, '2020-01-01 12:30:15', NULL, true, NULL, 4)
      , ('DEPORTES', 'Fifa', 59.99, 3, '2020-09-15 14:23:15', NULL, true, NULL, 1)
      , ('PLATAFORMA', 'Crash Bandicoot', 39.90, 3, '2019-08-28 21:23:15', NULL, true, NULL, 3)

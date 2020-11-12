@@ -205,7 +205,7 @@
                 volver();
 
             } catch (PDOException $e) {
-                error('No se ha podido insertar la fila.');
+                error('No se ha podido modificar la fila.');
             }
         } else {
                 mostrar_errores($error);

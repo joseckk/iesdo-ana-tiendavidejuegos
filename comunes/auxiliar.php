@@ -69,17 +69,6 @@
         return $tnombre;
     }
 
-    function comprobar_disponibilidad($vnombre, $pdo) 
-    {
-        $sent = $pdo->prepare('SELECT *
-                                 FROM videojuego
-                                WHERE vnombre = :vnombre
-                                  AND usuario_id == null');
-        $sent->execute(['vnombre' => $vnombre]);
-
-        return $sent->fetchColumn() != 0;
-    }
-
     function existe_usuario($usuario_id, $pdo)
     {
         $sent = $pdo->prepare('SELECT *

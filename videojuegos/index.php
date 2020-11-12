@@ -34,7 +34,7 @@
     <?php 
 
         $pdo = conectar();
-
+        
         if ($vnombre == '') {
 
             $sent = $pdo->query("SELECT * FROM videojuego");
