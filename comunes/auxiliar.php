@@ -55,6 +55,20 @@
         return $sent->fetchColumn() != 0;
     }
 
+    function buscar_tienda($tienda_id, $pdo)
+    {
+        $sent = $pdo->prepare('SELECT tnombre
+                                 FROM tienda
+                                WHERE id = :tienda_id');
+        $sent->execute(['tienda_id' => $tienda_id]);
+
+        foreach ($sent as $fila) {
+            extract($fila);
+        }
+
+        return $tnombre;
+    }
+
     function conectar() 
     {
 
