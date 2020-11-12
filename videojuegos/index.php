@@ -20,6 +20,7 @@
     require '../comunes/auxiliar.php';
 
     head();
+    comprobar_logueado();
     
     $vnombre = recoger_get('vnombre');
     

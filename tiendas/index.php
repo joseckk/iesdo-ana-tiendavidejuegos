@@ -16,6 +16,7 @@
     <?php
     require '../comunes/auxiliar.php';
 
+    comprobar_logueado();
     head();
     
     $cod_postal = recoger_get('cod_postal');

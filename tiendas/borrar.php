@@ -3,6 +3,7 @@ session_start();
 
 require '../comunes/auxiliar.php';
 
+comprobar_admin();
 
 if (isset($_POST['id'])) {
 

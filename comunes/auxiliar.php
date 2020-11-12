@@ -5,7 +5,7 @@
         if (!isset($_COOKIE['acepta_cookies'])) {?>
             <h3>
                 Este sitio usa cookies
-                <a href="cookies.php">Aceptar</a>
+                <a href="../cookies.php">Aceptar</a>
             </h3><?php
         } 
     }
@@ -123,6 +123,26 @@
         return ($a == $b) ? 'selected' : '';
     }
 
+    function logueado()
+    {
+        return $_SESSION['login'] ?? false;
+    }
+
+    function encabezado()
+    {
+        if ($logueado = logueado()): ?>
+            <form action="/comunes/logout.php" method="post" style="float:right">
+                <?= $logueado['nombre'] ?>
+                <button type="submit">Logout</button>
+            </form><?php
+        else: ?>
+            <form action="/comunes/login.php" style="float:right">
+                <button type="submit">Login</button>
+            </form><?php
+        endif;
+    }
+
+
     function conectar() 
     {
 
@@ -162,7 +182,26 @@
     }
 
     function head()
-    {
+    {   
+        encabezado();
         banner();
         flash();
+    }
+
+    function comprobar_logueado()
+    {
+        if (!logueado()) {
+            $_SESSION['flash'] = 'Debe estar logueado.';
+            header('Location: /comunes/login.php');
+        }
+    }
+
+    function comprobar_admin()
+    {
+        comprobar_logueado();
+
+        if (logueado()['nombre'] != 'admin') {
+            $_SESSION['flash'] = 'Debe ser administrador.';
+            volver();
+        }
     }

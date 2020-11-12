@@ -11,6 +11,7 @@
     <?php
     require '../comunes/auxiliar.php';
 
+    comprobar_admin();
     head();
 
     $cod_postal = recoger_post('cod_postal');

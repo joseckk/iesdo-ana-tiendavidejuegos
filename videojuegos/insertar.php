@@ -12,6 +12,8 @@
     require '../comunes/auxiliar.php';
 
     head();
+    comprobar_admin();
+
 
     const PAR = [
         'video_tipo'=> 'Tipo',

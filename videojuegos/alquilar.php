@@ -3,6 +3,8 @@ session_start();
 
 require '../comunes/auxiliar.php';
 
+comprobar_logueado();
+
 const PAR = [
     'video_tipo'=> 'Tipo',
     'vnombre' => 'Nombre',
@@ -20,8 +22,6 @@ if (isset($_POST['id'])) {
     $id = recoger_post('id');
 
     $pdo = conectar();
-
-    $alquilado = true;
 
     $sent = $pdo->prepare("SELECT id
                                 , video_tipo
