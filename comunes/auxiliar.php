@@ -126,6 +126,18 @@
         return $sent->fetchColumn() != 0;
     }
 
+    function comprobar_estado($id) 
+    {
+        $pdo = conectar();
+
+        $sent = $pdo->prepare('SELECT *
+                                 FROM videojuego
+                                WHERE usuario_id = :id');
+        $sent->execute(['id' => $id]);
+
+        return $sent->fetchColumn() != 0;
+    }
+
     function selected($a, $b)
     {
         return ($a == $b) ? 'selected' : '';

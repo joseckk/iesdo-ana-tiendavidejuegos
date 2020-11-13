@@ -17,13 +17,16 @@ if (isset($_POST['id'])) {
 
     $id = trim($_POST['id']);
 
-    $pdo = conectar();
+    if (!comprobar_estado($id)){
+        $pdo = conectar();
 
-    $sent = $pdo->prepare('DELETE FROM usuario WHERE id = :id');
-    
-    $sent->execute(['id' => $id]);
-
+        $sent = $pdo->prepare('DELETE FROM usuario WHERE id = :id');
+        
+        $sent->execute(['id' => $id]);
+        
+        $_SESSION['flash'] = 'Se ha borrado el usuario correctamente';
+        volver();
+    }
 }
-
-$_SESSION['flash'] = 'Se ha borrado la fila correctamente';
+$_SESSION['flash'] = 'El usuario tiene un saldo a pagar';
 volver();
