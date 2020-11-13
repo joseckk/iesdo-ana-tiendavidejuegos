@@ -21,6 +21,10 @@
 
     head();
     comprobar_logueado();
+
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(32));
+    }
     
     $vnombre = recoger_get('vnombre');
     
@@ -101,6 +105,8 @@
                     <td>
                         <form action="/videojuegos/borrar.php" method="post" class="borrar">
                             <input type="hidden" name="id" value="<?= hh($id) ?>">
+                            <input type="hidden" name="csrf_token"
+                                   value="<?= $_SESSION['csrf_token'] ?>">
                             <button type="submit">borrar</button>
                         </form>
                         <form action="/videojuegos/alquilar.php" method="post" class="alquilar">

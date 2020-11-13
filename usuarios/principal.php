@@ -18,6 +18,10 @@
 
     head();
     comprobar_admin();
+
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(32));
+    }
     
     $login = recoger_get('login');
     
@@ -57,6 +61,8 @@
                     <td>
                         <form action="/usuarios/borrar.php" method="post" class="borrar">
                             <input type="hidden" name="id" value="<?= hh($id) ?>">
+                            <input type="hidden" name="csrf_token"
+                                   value="<?= $_SESSION['csrf_token'] ?>">
                             <button type="submit">borrar</button>
                         </form>
                         <a href="/usuarios/modificar.php?id=<?= hh($id) ?>">modificar</a>

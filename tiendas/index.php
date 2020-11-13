@@ -19,6 +19,10 @@
     comprobar_logueado();
     head();
     
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(32));
+    }
+
     $cod_postal = recoger_get('cod_postal');
     
     ?>
@@ -63,8 +67,10 @@
                     <td><?= $fila['loc'] ?></td>
                     <td><?= $fila['tnombre'] ?></td>
                     <td>
-                        <form action="/tiendas/borrar.php" method="post" class="borrar">
+                        <form action="/tiendas/borrar.php" method="post" class="borrar">    
                             <input type="hidden" name="id" value="<?= hh($id) ?>">
+                            <input type="hidden" name="csrf_token"
+                                   value="<?= $_SESSION['csrf_token'] ?>">
                             <button type="submit">borrar</button>
                         </form>
                         <a href="/tiendas/modificar.php?id=<?= hh($id) ?>">modificar</a>
