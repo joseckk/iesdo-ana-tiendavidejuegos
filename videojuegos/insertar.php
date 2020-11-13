@@ -198,32 +198,32 @@
         <p>
             <label for="video_tipo">Tipo:</label>
             <input type="text" name="video_tipo" id="video_tipo" 
-                    value="<?= $video_tipo ?>">
+                    value="<?= hh($video_tipo) ?>">
         </p>
         <p>
             <label for="vnombre">Nombre:</label>
             <input type="text" name="vnombre" id="vnombre" 
-                    value="<?= $vnombre ?>">
+                    value="<?= hh($vnombre) ?>">
         </p>
         <p>
             <label for="precio">Precio:</label>
             <input type="text" name="precio" id="precio" 
-                    value="<?= $precio ?>">
+                    value="<?= hh($precio) ?>">
         </p>
         <p>
             <label for="pegi">Pegi:</label>
             <input type="text" name="pegi" id="pegi" 
-                    value="<?= $pegi ?>">
+                    value="<?= hh($pegi) ?>">
         </p>
         <p>
             <label for="fecha_alt">Fecha de alta:</label>
             <input type="text" name="fecha_alt" id="fecha_alt" 
-                    value="<?= $fecha_alt_fmt ?>">
+                    value="<?= hh($fecha_alt_fmt) ?>">
         </p>
         <p>
             <label for="fecha_baj">Fecha de baja:</label>
             <input type="text" name="fecha_baj" id="fecha_baj" 
-                    value="<?= $fecha_baj_fmt ?>">
+                    value="<?= hh($fecha_baj_fmt) ?>">
         </p>
         <p>
             <label for="disponibilidad">Disponibilidad:</label>
@@ -239,7 +239,7 @@
                 <option value="<?= '' ?>"></option>
                 <?php foreach (lista_usuarios($pdo) as $key => $value) :?>
                     <option value="<?= $key ?>" <?= selected($usuario_id, $key) ?>>
-                        <?= $value ?>
+                        <?= hh($value) ?>
                     </option>
                 <?php endforeach ?>
             </select>
@@ -250,7 +250,7 @@
                 <option value="<?= '' ?>"></option>
                 <?php foreach (lista_tiendas($pdo) as $key => $value) :?>
                     <option value="<?= $key ?>" <?= selected($tienda_id, $key) ?>>
-                        <?= $value ?>
+                        <?= hh($value) ?>
                     </option>
                 <?php endforeach ?>
             </select>

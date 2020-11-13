@@ -205,3 +205,8 @@
             volver();
         }
     }
+
+    function hh($s)
+    {
+        return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE);
+    }

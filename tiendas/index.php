@@ -25,7 +25,7 @@
 
     <form action="" method="get">
         <label for="cod_postal">Código Postal:</label>
-        <input type="text" name="cod_postal" id="cod_postal" value="<?= $cod_postal ?>">
+        <input type="text" name="cod_postal" id="cod_postal" value="<?= hh($cod_postal) ?>">
         <button type="submit">buscar</button>
     </form> <br>
 
@@ -64,10 +64,10 @@
                     <td><?= $fila['tnombre'] ?></td>
                     <td>
                         <form action="/tiendas/borrar.php" method="post" class="borrar">
-                            <input type="hidden" name="id" value="<?= $id ?>">
+                            <input type="hidden" name="id" value="<?= hh($id) ?>">
                             <button type="submit">borrar</button>
                         </form>
-                        <a href="/tiendas/modificar.php?id=<?= $id ?>">modificar</a>
+                        <a href="/tiendas/modificar.php?id=<?= hh($id) ?>">modificar</a>
                     </td>
                 </tr>
             <?php endforeach ?>

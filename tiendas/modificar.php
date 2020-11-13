@@ -106,17 +106,17 @@
         <p>
             <label for="cod_postal">Código Postal:</label>
             <input type="text" name="cod_postal" id="cod_postal" 
-                    value="<?= $cod_postal ?>">
+                    value="<?= hh($cod_postal) ?>">
         </p>
         <p>
             <label for="loc">Localidad:</label>
             <input type="text" name="loc" id="loc" 
-                    value="<?= $loc ?>">
+                    value="<?= hh($loc) ?>">
         </p>
         <p>
             <label for="tnombre">Nombre:</label>
             <input type="text" name="tnombre" id="tnombre" 
-                    value="<?= $tnombre ?>">
+                    value="<?= hh($tnombre) ?>">
         </p>
         <button type="submit">Modificar</button>
         <?php cancelar() ?>

@@ -28,18 +28,16 @@
 
     <form action="" method="get">
         <label for="vnombre">Nombre:</label>
-        <input type="text" name="vnombre" id="vnombre" value="<?= $vnombre ?>">
+        <input type="text" name="vnombre" id="vnombre" value="<?= hh($vnombre) ?>">
         <button type="submit">buscar</button>
     </form> <br>
 
-    <?php 
+    <?php
 
         $pdo = conectar();
         
         if ($vnombre == '') {
-
             $sent = $pdo->query("SELECT * FROM videojuego");
-
         } else {
             $sent = $pdo->prepare("SELECT *
                                      FROM videojuego
@@ -62,10 +60,10 @@
             <th>ACCIONES</th>
         </thead>
         <tbody>
-            <?php foreach($sent as $fila): 
+            <?php foreach ($sent as $fila):
                 extract($fila);
                 
-                $fmt = new NumberFormatter('es-Es',NumberFormatter::CURRENCY);
+                $fmt = new NumberFormatter('es-Es', NumberFormatter::CURRENCY);
                 if ($precio != '') {
                     $precio_fmt = $fmt->formatCurrency($precio, 'EUR');
                 } else {
@@ -92,24 +90,24 @@
                 
                 ?>
                 <tr>
-                    <td><?= $video_tipo ?></td>
-                    <td><?= $vnombre ?></td>
-                    <td><?= $precio_fmt ?></td>
-                    <td><?= $pegi ?></td>
-                    <td><?= $fecha_alt_fmt ?></td>
-                    <td><?= $fecha_baj_fmt ?></td>
-                    <td><?= $disponibilidad_fmt ?></td>
-                    <td><?= $tienda_id_fmt ?></td>
+                    <td><?= hh($video_tipo) ?></td>
+                    <td><?= hh($vnombre) ?></td>
+                    <td><?= hh($precio_fmt) ?></td>
+                    <td><?= hh($pegi) ?></td>
+                    <td><?= hh($fecha_alt_fmt) ?></td>
+                    <td><?= hh($fecha_baj_fmt) ?></td>
+                    <td><?= hh($disponibilidad_fmt) ?></td>
+                    <td><?= hh($tienda_id_fmt) ?></td>
                     <td>
                         <form action="/videojuegos/borrar.php" method="post" class="borrar">
-                            <input type="hidden" name="id" value="<?= $id ?>">
+                            <input type="hidden" name="id" value="<?= hh($id) ?>">
                             <button type="submit">borrar</button>
                         </form>
                         <form action="/videojuegos/alquilar.php" method="post" class="alquilar">
-                            <input type="hidden" name="id" value="<?= $id ?>">
+                            <input type="hidden" name="id" value="<?= hh($id) ?>">
                             <button type="submit">alquilar</button>
                         </form>
-                        <a href="/videojuegos/modificar.php?id=<?= $id ?>">modificar</a>
+                        <a href="/videojuegos/modificar.php?id=<?= hh($id) ?>">modificar</a>
                     </td>
                 </tr>
             <?php endforeach ?>

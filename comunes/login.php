@@ -1,4 +1,4 @@
-<?php session_start() ?>
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -50,7 +50,7 @@
         <p>
             <label for="login">Login:</label>
             <input type="text" name="login" id="login"
-                   value="<?= $login ?>">
+                   value="<?= hh($login) ?>">
         </p>
         <p>
             <label for="password">Contraseña:</label>
