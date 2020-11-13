@@ -111,6 +111,8 @@
                         </form>
                         <form action="/videojuegos/alquilar.php" method="post" class="alquilar">
                             <input type="hidden" name="id" value="<?= hh($id) ?>">
+                            <input type="hidden" name="csrf_token"
+                                   value="<?= $_SESSION['csrf_token'] ?>">
                             <button type="submit">alquilar</button>
                         </form>
                         <a href="/videojuegos/modificar.php?id=<?= hh($id) ?>">modificar</a>

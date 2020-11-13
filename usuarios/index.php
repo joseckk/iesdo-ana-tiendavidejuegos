@@ -14,6 +14,10 @@
     comprobar_logueado();
     head();
     
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(32));
+    }
+
     $fecha_baj = recoger_get('fecha_baj');
     
     ?>
@@ -75,6 +79,8 @@
                     <td><?= $fila['t_tnombre'] ?></td>
                     <td>
                         <form action="/usuarios/devolver.php" method="post" class="devolver">
+                            <input type="hidden" name="csrf_token"
+                                   value="<?= $_SESSION['csrf_token'] ?>">
                             <input type="hidden" name="id" value="<?= hh($id) ?>">
                             <button type="submit">devolver producto</button>
                         </form>

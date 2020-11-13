@@ -5,6 +5,14 @@ require '../comunes/auxiliar.php';
 
 comprobar_logueado();
 
+if (!isset($_POST['csrf_token'])) {
+    volver();
+    return;
+} elseif ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
+    volver();
+    return;
+}
+
 const PAR = [
     'video_tipo'=> 'Tipo',
     'vnombre' => 'Nombre',
