@@ -42,6 +42,9 @@ if (isset($_POST['id'])) {
     if ($disponibilidad) {
 
         $disponibilidad = '0';
+        $fecha_baj = date('d-m-Y');
+        $logueado = logueado();
+        $usuario_id = $logueado['id'];
 
         $marcadores = [];
         foreach (PAR as $k => $v) {

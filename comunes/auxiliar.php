@@ -118,6 +118,19 @@
         return $ret;
     }
 
+    function consulta_usuario()
+    {
+        $query = "SELECT v.id, to_char(v.fecha_baj, 'DD-MM-YYYY') AS v_fecha_baj
+                       , v.vnombre AS v_vnombre
+                       , t.tnombre AS t_tnombre
+                    FROM videojuego v
+                    JOIN tienda t
+                      ON v.tienda_id = t.id
+                     AND v.usuario_id = :usuario_id";
+       
+       return $query;
+    }
+
     function selected($a, $b)
     {
         return ($a == $b) ? 'selected' : '';
@@ -132,6 +145,7 @@
     {
         if ($logueado = logueado()): ?>
             <form action="/comunes/logout.php" method="post" style="float:right">
+                <a href="/usuarios/index.php"><h3><strong>Mi lista</strong></h3></a>
                 <?= $logueado['nombre'] ?>
                 <button type="submit">Logout</button>
             </form><?php

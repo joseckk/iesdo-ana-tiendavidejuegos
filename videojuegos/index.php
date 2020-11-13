@@ -15,7 +15,7 @@
     </style>
 </head>
 <body>
-    
+    <a href="../index.php"><h2>INICIO</h2></a>
     <?php
     require '../comunes/auxiliar.php';
 
