@@ -118,17 +118,12 @@
         return $ret;
     }
 
-    function consulta_usuario()
-    {
-        $query = "SELECT v.id, to_char(v.fecha_baj, 'DD-MM-YYYY') AS v_fecha_baj
-                       , v.vnombre AS v_vnombre
-                       , t.tnombre AS t_tnombre
-                    FROM videojuego v
-                    JOIN tienda t
-                      ON v.tienda_id = t.id
-                     AND v.usuario_id = :usuario_id";
+    function comprobar_lista_usuario($pdo, $usuario_id, $query)
+    {        
+        $sent = $pdo->prepare($query);
+        $sent->execute(['usuario_id' => $usuario_id]);
        
-       return $query;
+        return $sent->fetchColumn() != 0;
     }
 
     function selected($a, $b)
