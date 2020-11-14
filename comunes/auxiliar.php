@@ -201,7 +201,7 @@
 
     function cancelar()
     {?>
-        <a href="index.php">Volver</a><?php
+        <a href="../index.php">Volver</a><?php
     }
 
     function flash()
