@@ -15,5 +15,6 @@
     ?>
     <p class="tiendas"><a href="tiendas/index.php">Consultar tiendas</a></p>
     <p class="videojuegos"><a href="videojuegos/index.php">Consultar videojuegos</a></p>
+    <p class="usuarios"><a href="usuarios/principal.php">Consultar usuarios</a></p>
 </body>
 </html>

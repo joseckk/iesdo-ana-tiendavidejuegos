@@ -138,6 +138,16 @@
         return $sent->fetchColumn() != 0;
     }
 
+    function comprobar_usuario($login, $pdo)
+    {
+        $sent = $pdo->prepare('SELECT *
+                                 FROM usuario
+                                WHERE login = :login');
+        $sent->execute(['login' => $login]);
+
+        return $sent->fetchColumn() != 0;
+    }
+
     function selected($a, $b)
     {
         return ($a == $b) ? 'selected' : '';

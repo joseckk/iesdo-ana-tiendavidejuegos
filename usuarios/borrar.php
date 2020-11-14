@@ -26,7 +26,9 @@ if (isset($_POST['id'])) {
         
         $_SESSION['flash'] = 'Se ha borrado el usuario correctamente';
         volver();
+    } else {
+        $_SESSION['flash'] = 'El usuario tiene un saldo a pagar';
+        volver();
     }
 }
-$_SESSION['flash'] = 'El usuario tiene un saldo a pagar';
 volver();
