@@ -93,8 +93,6 @@
             
             foreach ($sent as $fila) {
                 $login = $fila['login'];
-                $password = $fila['password'];
-                $crypt_password = $fila['password'];
             }
         }
     }
@@ -110,12 +108,12 @@
         </p>
         <p>
             <label for="password">Contraseña:</label>
-            <input type="text" name="password" id="password" 
+            <input type="password" name="password" id="password" 
                     value="<?= hh($password) ?>">
         </p>
         <p>
             <label for="crypt_password">Repite la contraseña:</label>
-            <input type="text" name="crypt_password" id="crypt_password" 
+            <input type="password" name="crypt_password" id="crypt_password" 
                     value="<?= hh($crypt_password) ?>">
         </p>
         <button type="submit">Modificar</button>
