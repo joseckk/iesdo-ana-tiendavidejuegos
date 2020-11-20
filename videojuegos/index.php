@@ -119,13 +119,13 @@
                                 <input type="hidden" name="id" value="<?= hh($id) ?>">
                                 <input type="hidden" name="csrf_token"
                                     value="<?= $_SESSION['csrf_token'] ?>">
-                                <button type="submit">borrar</button>
+                                <button type="submit" class="bg-danger">borrar</button>
                             </form>
                             <form action="/videojuegos/alquilar.php" method="post">
                                 <input type="hidden" name="id" value="<?= hh($id) ?>">
                                 <input type="hidden" name="csrf_token"
                                     value="<?= $_SESSION['csrf_token'] ?>">
-                                <button type="submit">alquilar</button>
+                                <button type="submit" class="bg-success">alquilar</button>
                             </form>
                             <a href="/videojuegos/modificar.php?id=<?= hh($id) ?>">modificar</a>
                         </td>
