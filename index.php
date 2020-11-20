@@ -18,9 +18,12 @@
     <div class="container-fluid">
         <div class="row-md-12">
             <div class="col-md-12">
-                <nav class="navbar navbar-expand-lg navbar-light bg-info">
-                    <a class="navbar-brand" href="index.php">Inicio</a>
+                <nav class="navbar navbar-expand-lg">
                     
+                    <img src="/imagenes/Rubik.jpg" width="5%" height="2%">
+
+                    <a class="navbar-brand ml-5" href="index.php">Inicio</a>
+
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item active">
