@@ -6,11 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tiendas</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style>
-        .borrar {
-            display: inline;
-        }
-    </style>
 </head>
 <body>
     <?php
@@ -90,7 +85,7 @@
                         <td scope="row"><?= $fila['loc'] ?></td>
                         <td scope="row"><?= $fila['tnombre'] ?></td>
                         <td scope="row">
-                            <form action="/tiendas/borrar.php" method="post" class="borrar">    
+                            <form action="/tiendas/borrar.php" method="post">    
                                 <input type="hidden" name="id" value="<?= hh($id) ?>">
                                 <input type="hidden" name="csrf_token"
                                     value="<?= $_SESSION['csrf_token'] ?>">
