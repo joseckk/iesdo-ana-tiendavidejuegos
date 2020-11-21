@@ -148,6 +148,18 @@
         return $sent->fetchColumn() != 0;
     }
 
+    function comprobar_usuario_otra_fila($login, $pdo, $id)
+    {
+        $sent = $pdo->prepare('SELECT *
+                                 FROM usuario
+                                WHERE login = :login
+                                  AND id != :id');
+        $sent->execute(['login' => $login,
+                        'id' => $id]);
+
+        return $sent->fetchColumn() != 0;
+    }
+
     function selected($a, $b)
     {
         return ($a == $b) ? 'selected' : '';

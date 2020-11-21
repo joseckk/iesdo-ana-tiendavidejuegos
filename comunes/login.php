@@ -48,6 +48,18 @@
     }
     ?>
 
+    <div class="container-fluid">
+        <div class="row-md-12">
+            <div class="col-md-12">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                            
+                    <img src="/imagenes/Rubik.jpg" width="5%" height="2%">
+
+                </nav>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <form action="" method="post">
             <div class="form-group mt-5 mr-5">

@@ -56,7 +56,7 @@
 
         <form class="form-inline" action="" method="get">
             <div class="form-group mt-5 mr-5 mb-5">
-                <label class="col-md-4 control-label ml-5 mr-1" for="login">Nombre:</label>
+                <label class="col-md-4 control-label ml-5 mr-1" for="login"><strong>Nombre:</strong></label>
                 <input type="text" class="col-md-4 form-control ml-1 mr-3" name="login" id="login" 
                         value="<?= hh($login) ?>">
                 <button type="submit" class="btn btn-primary">buscar</button>

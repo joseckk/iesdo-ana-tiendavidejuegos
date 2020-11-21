@@ -36,7 +36,7 @@
             if (mb_strlen($login) > 255) {
                 $error['login'][] = 'El nombre es demasiado larga.';
             } else {
-                if (comprobar_usuario($llogin, $pdo)) {
+                if (comprobar_usuario($login, $pdo)) {
                     $error['login'][] = 'El usuario ya existe.';
                 }
             }
@@ -54,12 +54,8 @@
         if ($crypt_password == '') {
             $error['crypt_password'][] = 'La debes repetir la contraseña.';
         } else {
-            if (mb_strlen($crypt_password) > 255) {
-                $error['crypt_password'][] = 'La contraseña es demasiado larga.';
-            } else {
-                if ($password != $crypt_password) {
-                    $error['crypt_password'][] = 'La contraseñas no coinciden.';
-                }
+            if ($password != $crypt_password) {
+                $error['crypt_password'][] = 'La contraseñas no coinciden.';
             }
         }
 
@@ -68,14 +64,15 @@
         if ($error === $error_vacio) {
             try {
                     $sent = $pdo->prepare("INSERT INTO usuario(login, password)
-                                                VALUES (:login, crypt(:password, gen_salt('bf', 10)))");
+                                                VALUES (:login, :password)");
 
                     $sent->execute([ ':login' => $login
-                                    ,':password' => $password]);
+                                    ,':password' => password_hash($password, PASSWORD_DEFAULT)]);
 
                     $_SESSION['flash'] = 'Se ha insertado la fila correctamente';
                     volver();
             } catch (PDOException $e) {
+                var_dump($e);
                 error('No se ha podido insertar la fila.');
             }
         } else {

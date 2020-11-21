@@ -37,30 +37,25 @@
             if (mb_strlen($login) > 255) {
                 $error['login'][] = 'El nombre es demasiado larga.';
             } else {
-                if (comprobar_usuario($llogin, $pdo)) {
+                if (comprobar_usuario_otra_fila($login, $pdo, $id)) {
                     $error['login'][] = 'El usuario ya existe.';
                 }
             }
         }
 
 
-        if ($password == '') {
-            $error['password'][] = 'La contraseña es obligatoria.';
-        } else {
-            if (mb_strlen($password) > 255) {
-                $error['password'][] = 'La contraseña es demasiado larga.';
-            } 
-        }
+        $set = '';
+        $execute = [
+            'login' => $login,
+            'id' => $id,
+        ];
 
-        if ($crypt_password == '') {
-            $error['crypt_password'][] = 'La debes repetir la contraseña.';
-        } else {
-            if (mb_strlen($crypt_password) > 255) {
-                $error['crypt_password'][] = 'La contraseña es demasiado larga.';
+        if ($password != '' && $crypt_password != '') {
+            if ($password != $crypt_password) {
+                $error['password'][] = 'Las contraseñas no coinciden.';
             } else {
-                if ($password != $crypt_password) {
-                    $error['crypt_password'][] = 'La contraseñas no coinciden.';
-                }
+                $set = ', password = :password';
+                $execute['password'] = password_hash($password, PASSWORD_DEFAULT);
             }
         }
 
@@ -70,12 +65,10 @@
             try {
                 $sent = $pdo->prepare("UPDATE usuario
                                           SET login = :login
-                                            , password = crypt(:password, gen_salt('bf', 10))
+                                              $set
                                         WHERE id = :id");
                                         
-                $sent->execute(['login'=> $login
-                              , 'password'=> $password
-                              , 'id'=> $id]);
+                $sent->execute($execute);
                               
                 $_SESSION['flash'] = 'Se ha modificado la fila correctamente';
                 volver();
@@ -101,7 +94,7 @@
     
     ?>
 
-<div class="container-fluid">
+    <div class="container-fluid">
         <div class="row-md-12">
             <div class="col-md-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
@@ -127,15 +120,13 @@
             <div class="form-group mt-5">
                 <label class="col-lg-4 control-label" for="password">Contraseña:</label>
                 <div class="col-lg-4">
-                    <input type="password" class="form-control" name="password" id="password"
-                            value="<?= hh($password) ?>">
+                    <input type="password" class="form-control" name="password" id="password">
                 </div>
             </div>
             <div class="form-group mt-5">
                 <label class="col-lg-4 control-label" for="crypt_password">Repite la contraseña:</label>
                 <div class="col-lg-4">
-                    <input type="password" class="form-control" name="crypt_password" id="crypt_password"
-                            value="<?= hh($crypt_password) ?>">
+                    <input type="password" class="form-control" name="crypt_password" id="crypt_password">
                 </div>
             </div>
             <div class="col-lg-4">
