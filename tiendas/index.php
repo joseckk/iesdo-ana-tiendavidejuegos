@@ -60,7 +60,7 @@
         <div>
             <form class="form-inline" action="" method="get">
                 <div class="form-group mt-5 mr-5 mb-5">
-                    <label class="col-md-4 control-label ml-5 mr-1" for="cod_postal">Código Postal:</label>
+                    <label class="col-md-4 control-label ml-5 mr-1" for="cod_postal"><strong>Código postal:</strong></label>
                     <input type="text" class="col-md-4 form-control ml-1 mr-3" name="cod_postal" id="cod_postal" 
                             value="<?= hh($cod_postal) ?>">
                     <button type="submit" class="btn btn-primary">buscar</button>

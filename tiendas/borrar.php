@@ -14,7 +14,6 @@ if (!isset($_POST['csrf_token'])) {
 }
 
 if (isset($_POST['id'])) {
-
     $id = trim($_POST['id']);
 
     $pdo = conectar();
@@ -23,7 +22,6 @@ if (isset($_POST['id'])) {
     
     $sent->execute(['id' => $id]);
 
+    $_SESSION['flash'] = 'Se ha borrado la fila correctamente';
 }
-
-$_SESSION['flash'] = 'Se ha borrado la fila correctamente';
 volver();

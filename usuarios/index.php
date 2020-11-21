@@ -68,7 +68,7 @@
 
         <form class="form-inline" action="" method="get">
             <div class="form-group mt-5 mr-5 mb-5">
-                <label class="col-md-4 control-label ml-5 mr-1" for="fecha_baj">Fecha de alquiler:</label>
+                <label class="col-md-4 control-label ml-5 mr-1" for="fecha_baj"><strong>Fecha de alquiler:</strong></label>
                 <input type="text" class="col-md-4 form-control ml-1 mr-3" name="fecha_baj" id="fecha_baj" 
                         value="<?= hh($fecha_baj) ?>">
                 <button type="submit" class="btn btn-primary">buscar</button>
