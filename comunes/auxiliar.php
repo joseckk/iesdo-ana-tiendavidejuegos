@@ -89,6 +89,23 @@
         return $sent->fetchColumn() != 0;
     }
 
+    function encontrar_tienda($tnombre, $pdo)
+    {
+        $sent = $pdo->prepare('SELECT id AS t_id 
+                                 FROM tienda 
+                                WHERE tnombre = :tnombre');
+        $sent->execute(['tnombre' => $tnombre]);
+
+        $fila = $sent->fetch();
+
+        if ($fila != null) {
+            $tienda_id = $fila['t_id'];
+
+            return $tienda_id;
+        }
+        return $tienda_id = null;
+    }
+
     function lista_usuarios($pdo)
     {
         $sent = $pdo->query('SELECT id, login
@@ -161,25 +178,61 @@
     }
 
     function mostrar_tabla($nombre, $patron, $parametro, $pdo)
-    {
-        if ($parametro == '') {
+    {   
+        $parametro_valido = false;
+
+        if ($patron == '' || $parametro == '') {
+            $parametro_valido = true;
             $sent = $pdo->query("SELECT * FROM $nombre");
         } else {
-            if (ctype_digit($parametro)){
+            if ($patron == 'video_tipo' || $patron == 'vnombre') {
+                $parametro_valido = true;
+            }
+
+            if ($patron == 'precio' || $patron == 'pegi') {
+                if (is_numeric($parametro)) {
+                    $parametro_valido = true;
+                }
+            }
+
+            if ($patron == 'disponibilidad') {
+                if ($parametro == 'stock') {
+                    $parametro = 1;
+                    $parametro_valido = true;
+                } else {
+                    if ($parametro == 'sin fecha de entrada') {
+                        $parametro = 0;
+                        $parametro_valido = true;
+                    }
+                }
+            }
+
+            if (encontrar_tienda($parametro, $pdo) != null) {
+                $parametro = intval(encontrar_tienda($parametro, $pdo));
+                $parametro_valido = true;
+            }
+            
+            
+        }
+
+
+        if ($parametro_valido == true) {
+            if (is_numeric($parametro)){
                 $patron_fmt = ':' . $patron;
                 $sent = $pdo->prepare("SELECT *
                                          FROM $nombre
-                                        WHERE $patron = $patron_fmt
-                                     ORDER BY $patron");
+                                        WHERE $patron = $patron_fmt");
                 $sent->execute([$patron => $parametro]);
             } else {
-                $sent = $pdo->query("SELECT *
-                                       FROM $nombre
-                                      WHERE $patron LIKE '%$parametro%'
-                                   ORDER BY $patron");
+                if ($parametro != '') {
+                    $sent = $pdo->query("SELECT *
+                                           FROM $nombre
+                                          WHERE $patron LIKE '%$parametro%'
+                                       ORDER BY $patron");
+                }
             }
+            return $sent;
         }
-        return $sent;
     }
 
     function selected($a, $b)
@@ -227,8 +280,11 @@
                    
         foreach ($error as $key => $array) {
             foreach ($array as $value) {?>
-
-            <h3><?= $value ?></h3><?php
+                <div class="row ml-5">
+                    <div class="alert alert-danger" role="alert">
+                            <?= $value ?>
+                    </div>
+                </div><?php
             }
         }
     }

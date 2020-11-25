@@ -84,7 +84,9 @@
             </form>
         </div>
 
-        <?php 
+        <?php
+            $patron_id ?? $patron_id = 0 ;
+            
             $k = LISTA[$patron_id]['valor'];            
                                             
             $sent = mostrar_tabla('tienda', $k, $val, $pdo); 

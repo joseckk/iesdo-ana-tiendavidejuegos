@@ -17,18 +17,55 @@
         $_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(32));
     }
     
-    $vnombre = recoger_get('vnombre');
-
+    
     $pdo = conectar();
-        
-    if ($vnombre == '') {
-        $sent = $pdo->query("SELECT * FROM videojuego");
-    } else {
-        $sent = $pdo->prepare("SELECT *
-                                 FROM videojuego
-                                WHERE vnombre = :vnombre");
-        $sent->execute([':vnombre' => $vnombre]);
-    }
+    
+    const LISTA = [
+        '0' => [
+            'id' => '0',
+            'nombre' => 'Tipo',
+            'valor' => 'video_tipo',
+        ],
+        '1' => [
+            'id' => '1',
+            'nombre' => 'Nombre',
+            'valor' => 'vnombre'
+        ],
+        '2' => [
+            'id' => '2',
+            'nombre' => 'Precio',
+            'valor' => 'precio'
+        ],
+        '3' => [
+            'id' => '3',
+            'nombre' => 'Pegi',
+            'valor' => 'pegi'
+        ],
+        '4' => [
+            'id' => '4',
+            'nombre' => 'Fecha de alta',
+            'valor' => 'fecha_alt'
+        ],
+        '5' => [
+            'id' => '5',
+            'nombre' => 'Fecha de baja',
+            'valor' => 'fecha_baj'
+        ],
+        '6' => [
+            'id' => '6',
+            'nombre' => 'Disponibilidad',
+            'valor' => 'disponibilidad'
+        ],
+        '7' => [
+            'id' => '7',
+            'nombre' => 'Tienda',
+            'valor' => 'tienda_id'
+        ],
+    ];
+    
+    $val = recoger_get('val');
+
+    $patron_id = recoger_get('patron_id');
     
     ?>
 
@@ -56,13 +93,39 @@
         <div class="row">
             <form class="form-inline" action="" method="get">
                 <div class="form-group mt-5 mr-5 mb-5">
-                    <label class="col-md-4 control-label ml-5 mr-1" for="vnombre"><strong>Nombre:</strong></label>
-                    <input type="text" class="col-md-4 form-control ml-1 mr-3" 
-                            name="vnombre" id="vnombre" value="<?= hh($vnombre) ?>">
+                    <label class="col-lg-4 control-label ml-5 mr-1" for="patron_id"><strong>Patrón de busqueda:</strong></label>
+                    <div class="col-lg-4">
+                        <select class="form-control" name="patron_id" id="patron_id">
+                            <option value="<?= '' ?>"></option>
+                            <?php foreach (LISTA as $key => $value) :?>
+                                <option value="<?= $key ?>" <?= selected($patron_id, $key) ?>>
+                                    <?= hh($value['nombre']) ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                        <input type="text" class="col-md-8 form-control mt-2 mr-3" name="val" id="val" 
+                            value="<?= hh($val) ?>">
+                    </div>
                     <button type="submit" class="btn btn-primary">buscar</button>
                 </div>
             </form>
         </div>
+
+        <?php  
+            if ($patron_id == '') {
+                $sent = mostrar_tabla('videojuego', '', $val, $pdo); 
+            } else {
+                $patron_id ?? $patron_id = 0 ;
+
+                $k = LISTA[$patron_id]['valor'];            
+                                              
+                $sent = mostrar_tabla('videojuego', $k, $val, $pdo);
+
+                if ($sent == null || $sent->rowCount() == 0) {
+                    return;
+                }
+            }
+        ?>
 
         <div class="row-md-12">
             <table class="table table-hover table-bordered text-center">
