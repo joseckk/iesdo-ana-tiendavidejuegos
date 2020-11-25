@@ -11,7 +11,6 @@
     <?php
     require '../comunes/auxiliar.php';
 
-    head();
     comprobar_logueado();
 
     if (!isset($_SESSION['csrf_token'])) {
@@ -35,6 +34,7 @@
 
     <div class="container-fluid">
         <div class="row-md-12">
+            <?php head() ?>
             <div class="col-md-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
                         
@@ -53,87 +53,89 @@
             </div>
         </div>
 
+        <div class="row">
+            <form class="form-inline" action="" method="get">
+                <div class="form-group mt-5 mr-5 mb-5">
+                    <label class="col-md-4 control-label ml-5 mr-1" for="vnombre"><strong>Nombre:</strong></label>
+                    <input type="text" class="col-md-4 form-control ml-1 mr-3" 
+                            name="vnombre" id="vnombre" value="<?= hh($vnombre) ?>">
+                    <button type="submit" class="btn btn-primary">buscar</button>
+                </div>
+            </form>
+        </div>
 
-        <form class="form-inline" action="" method="get">
-            <div class="form-group mt-5 mr-5 mb-5">
-                <label class="col-md-4 control-label ml-5 mr-1" for="vnombre"><strong>Nombre:</strong></label>
-                <input type="text" class="col-md-4 form-control ml-1 mr-3" 
-                        name="vnombre" id="vnombre" value="<?= hh($vnombre) ?>">
-                <button type="submit" class="btn btn-primary">buscar</button>
-            </div>
-        </form>
+        <div class="row-md-12">
+            <table class="table table-hover table-bordered text-center">
+                <thead class="thead-dark">
+                    <th scope="col">TIPO</th>
+                    <th scope="col">NOMBRE</th>
+                    <th scope="col">PRECIO</th>
+                    <th scope="col">PEGI</th>
+                    <th scope="col">FECHA DE ALTA</th>
+                    <th scope="col">FECHA DE BAJA</th>
+                    <th scope="col">DISPONIBILIDAD</th>
+                    <th scope="col">TIENDA</th>
+                    <th scope="col">ACCIONES</th>
+                </thead>
+                <tbody>
+                    <?php foreach ($sent as $fila):
+                        extract($fila);
+                        
+                        $fmt = new NumberFormatter('es-Es', NumberFormatter::CURRENCY);
+                        if ($precio != '') {
+                            $precio_fmt = $fmt->formatCurrency($precio, 'EUR');
+                        } else {
+                            $precio_fmt = null;
+                        }
 
-        <table class="table table-hover table-bordered text-center">
-            <thead class="thead-dark">
-                <th scope="col">TIPO</th>
-                <th scope="col">NOMBRE</th>
-                <th scope="col">PRECIO</th>
-                <th scope="col">PEGI</th>
-                <th scope="col">FECHA DE ALTA</th>
-                <th scope="col">FECHA DE BAJA</th>
-                <th scope="col">DISPONIBILIDAD</th>
-                <th scope="col">TIENDA</th>
-                <th scope="col">ACCIONES</th>
-            </thead>
-            <tbody>
-                <?php foreach ($sent as $fila):
-                    extract($fila);
-                    
-                    $fmt = new NumberFormatter('es-Es', NumberFormatter::CURRENCY);
-                    if ($precio != '') {
-                        $precio_fmt = $fmt->formatCurrency($precio, 'EUR');
-                    } else {
-                        $precio_fmt = null;
-                    }
+                        
+                        $fecha_alt_fmt = new DateTime($fecha_alt);
+                        $fecha_alt_fmt->setTimezone(new DateTimeZone('Europe/Madrid'));
+                        $fecha_alt_fmt = $fecha_alt_fmt->format('d-m-Y');
+                        
 
-                    
-                    $fecha_alt_fmt = new DateTime($fecha_alt);
-                    $fecha_alt_fmt->setTimezone(new DateTimeZone('Europe/Madrid'));
-                    $fecha_alt_fmt = $fecha_alt_fmt->format('d-m-Y');
-                    
+                        if ($fecha_baj != '') {
+                            $fecha_baj_fmt = new DateTime($fecha_baj);
+                            $fecha_baj_fmt->setTimezone(new DateTimeZone('Europe/Madrid'));
+                            $fecha_baj_fmt = $fecha_baj_fmt->format('d-m-Y');
+                        } else {
+                            $fecha_baj_fmt = null;
+                        }
 
-                    if ($fecha_baj != '') {
-                        $fecha_baj_fmt = new DateTime($fecha_baj);
-                        $fecha_baj_fmt->setTimezone(new DateTimeZone('Europe/Madrid'));
-                        $fecha_baj_fmt = $fecha_baj_fmt->format('d-m-Y');
-                    } else {
-                        $fecha_baj_fmt = null;
-                    }
+                        ($disponibilidad == true) ? $disponibilidad_fmt = 'stock' : $disponibilidad_fmt = 'sin fecha de entrada';
 
-                    ($disponibilidad == true) ? $disponibilidad_fmt = 'stock' : $disponibilidad_fmt = 'sin fecha de entrada';
-
-                    $tienda_id_fmt = buscar_tienda($tienda_id, $pdo);
-                    
-                    ?>
-                    <tr>
-                        <td scope="row"><?= hh($video_tipo) ?></td>
-                        <td scope="row"><?= hh($vnombre) ?></td>
-                        <td scope="row"><?= hh($precio_fmt) ?></td>
-                        <td scope="row"><?= hh($pegi) ?></td>
-                        <td scope="row"><?= hh($fecha_alt_fmt) ?></td>
-                        <td scope="row"><?= hh($fecha_baj_fmt) ?></td>
-                        <td scope="row"><?= hh($disponibilidad_fmt) ?></td>
-                        <td scope="row"><?= hh($tienda_id_fmt) ?></td>
-                        <td scope="row">
-                            <form action="/videojuegos/borrar.php" method="post">
-                                <input type="hidden" name="id" value="<?= hh($id) ?>">
-                                <input type="hidden" name="csrf_token"
-                                    value="<?= $_SESSION['csrf_token'] ?>">
-                                <button type="submit" class="bg-danger">borrar</button>
-                            </form>
-                            <form action="/videojuegos/alquilar.php" method="post">
-                                <input type="hidden" name="id" value="<?= hh($id) ?>">
-                                <input type="hidden" name="csrf_token"
-                                    value="<?= $_SESSION['csrf_token'] ?>">
-                                <button type="submit" class="bg-success">alquilar</button>
-                            </form>
-                            <a href="/videojuegos/modificar.php?id=<?= hh($id) ?>">modificar</a>
-                        </td>
-                    </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
-
+                        $tienda_id_fmt = buscar_tienda($tienda_id, $pdo);
+                        
+                        ?>
+                        <tr>
+                            <td scope="row"><?= hh($video_tipo) ?></td>
+                            <td scope="row"><?= hh($vnombre) ?></td>
+                            <td scope="row"><?= hh($precio_fmt) ?></td>
+                            <td scope="row"><?= hh($pegi) ?></td>
+                            <td scope="row"><?= hh($fecha_alt_fmt) ?></td>
+                            <td scope="row"><?= hh($fecha_baj_fmt) ?></td>
+                            <td scope="row"><?= hh($disponibilidad_fmt) ?></td>
+                            <td scope="row"><?= hh($tienda_id_fmt) ?></td>
+                            <td scope="row">
+                                <form action="/videojuegos/borrar.php" method="post">
+                                    <input type="hidden" name="id" value="<?= hh($id) ?>">
+                                    <input type="hidden" name="csrf_token"
+                                        value="<?= $_SESSION['csrf_token'] ?>">
+                                    <button type="submit" class="bg-danger">borrar</button>
+                                </form>
+                                <form action="/videojuegos/alquilar.php" method="post">
+                                    <input type="hidden" name="id" value="<?= hh($id) ?>">
+                                    <input type="hidden" name="csrf_token"
+                                        value="<?= $_SESSION['csrf_token'] ?>">
+                                    <button type="submit" class="bg-success">alquilar</button>
+                                </form>
+                                <a href="/videojuegos/modificar.php?id=<?= hh($id) ?>">modificar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 

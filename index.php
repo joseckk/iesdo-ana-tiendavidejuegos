@@ -12,11 +12,11 @@
         require 'comunes/auxiliar.php';
 
         comprobar_logueado();
-        head();
     ?>
 
     <div class="container-fluid">
         <div class="row-md-12">
+            <?php head() ?>
             <div class="col-md-12">
                 <nav class="navbar navbar-expand-lg">
                     

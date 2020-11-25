@@ -173,14 +173,14 @@
     function encabezado()
     {
         if ($logueado = logueado()): ?>
-            <form action="/comunes/logout.php" method="post" style="float:right">
-                <a href="/usuarios/index.php"><h3><strong>Mi lista</strong></h3></a>
+            <form class="row justify-content-end mt-2 mr-5" action="/comunes/logout.php" method="post">
+                <a class="col-sm-1" href="/usuarios/index.php"><h3><strong>Mi lista</strong></h3></a>
                 <?= $logueado['nombre'] ?>
-                <button type="submit">Logout</button>
+                <button type="submit" class="btn btn-outline-danger ml-2">Logout</button>
             </form><?php
         else: ?>
-            <form action="/comunes/login.php" style="float:right">
-                <button type="submit">Login</button>
+            <form class="row justify-content-end mt-2 mr-5" action="/comunes/login.php" >
+                <button type="submit" class="btn btn-outline-success">Login</button>
             </form><?php
         endif;
     }

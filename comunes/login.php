@@ -11,8 +11,6 @@
     <?php
     require './auxiliar.php';
 
-    head();
-
     $login = recoger_post('login');
     $password = recoger_post('password');
 
@@ -50,6 +48,7 @@
 
     <div class="container-fluid">
         <div class="row-md-12">
+        <?php head() ?>
             <div class="col-md-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
                             
@@ -61,25 +60,27 @@
     </div>
 
     <div class="container">
-        <form action="" method="post">
-            <div class="form-group mt-5 mr-5">
-                <label class="col-lg-4 control-label" for="login" >Nombre de usuario: </label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="login" id="login" 
-                            value="<?= hh($login) ?>">
+        <div class="row-md-12">
+            <form action="" method="post">
+                <div class="form-group mt-5 mr-5">
+                    <label class="col-lg-4 control-label" for="login" >Nombre de usuario: </label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="login" id="login" 
+                                value="<?= hh($login) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="password">Contraseña: </label>
-                <div class="col-lg-4">
-                    <input type="password" class="form-control" name="password" id="password" 
-                            placeholder="introduzca su contraseña">
+                <div class="form-group mt-5">
+                    <label class="col-lg-4 control-label" for="password">Contraseña: </label>
+                    <div class="col-lg-4">
+                        <input type="password" class="form-control" name="password" id="password" 
+                                placeholder="introduzca su contraseña">
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <button type="submit" class="btn btn-primary mt-5">login</button>
-            </div>
-        </form>
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-primary mt-5">login</button>
+                </div>
+            </form>
+        </div>
     </div>
 
 

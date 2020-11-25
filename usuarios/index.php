@@ -12,7 +12,6 @@
     require '../comunes/auxiliar.php';
 
     comprobar_logueado();
-    head();
     
     if (!isset($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(32));
@@ -55,6 +54,7 @@
 
     <div class="container-fluid">
         <div class="row-md-12">
+            <?php head() ?>
             <div class="col-md-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
                             
@@ -66,43 +66,45 @@
             </div>
         </div>
 
-        <form class="form-inline" action="" method="get">
-            <div class="form-group mt-5 mr-5 mb-5">
-                <label class="col-md-4 control-label ml-5 mr-1" for="fecha_baj"><strong>Fecha de alquiler:</strong></label>
-                <input type="text" class="col-md-4 form-control ml-1 mr-3" name="fecha_baj" id="fecha_baj" 
-                        value="<?= hh($fecha_baj) ?>">
-                <button type="submit" class="btn btn-primary">buscar</button>
-            </div>
-        </form>
+        <div class="row">
+            <form class="form-inline" action="" method="get">
+                <div class="form-group mt-5 mr-5 mb-5">
+                    <label class="col-md-4 control-label ml-5 mr-1" for="fecha_baj"><strong>Fecha de alquiler:</strong></label>
+                    <input type="text" class="col-md-4 form-control ml-1 mr-3" name="fecha_baj" id="fecha_baj" 
+                            value="<?= hh($fecha_baj) ?>">
+                    <button type="submit" class="btn btn-primary">buscar</button>
+                </div>
+            </form>
+        </div>
 
-
-        <table class="table table-hover table-bordered text-center">
-            <thead class="thead-dark">
-                <th scope="col">FECHA DE ALQUILER</th>
-                <th scope="col">NOMBRE</th>
-                <th scope="col">TIENDA</th>
-                <th scope="col">ACCIONES</th>
-            </thead>
-            <tbody>
-                <?php foreach($sent as $fila): 
-                    $id = $fila['id'] ?>
-                    <tr>
-                        <td scope="row"><?= $fila['v_fecha_baj'] ?></td>
-                        <td scope="row"><?= $fila['v_vnombre'] ?></td>
-                        <td scope="row"><?= $fila['t_tnombre'] ?></td>
-                        <td scope="row">
-                            <form action="/usuarios/devolver.php" method="post">
-                                <input type="hidden" name="csrf_token"
-                                    value="<?= $_SESSION['csrf_token'] ?>">
-                                <input type="hidden" name="id" value="<?= hh($id) ?>">
-                                <button type="submit" class="bg-primary">devolver producto</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
-
+        <div class="row-md-12">
+            <table class="table table-hover table-bordered text-center">
+                <thead class="thead-dark">
+                    <th scope="col">FECHA DE ALQUILER</th>
+                    <th scope="col">NOMBRE</th>
+                    <th scope="col">TIENDA</th>
+                    <th scope="col">ACCIONES</th>
+                </thead>
+                <tbody>
+                    <?php foreach($sent as $fila): 
+                        $id = $fila['id'] ?>
+                        <tr>
+                            <td scope="row"><?= $fila['v_fecha_baj'] ?></td>
+                            <td scope="row"><?= $fila['v_vnombre'] ?></td>
+                            <td scope="row"><?= $fila['t_tnombre'] ?></td>
+                            <td scope="row">
+                                <form action="/usuarios/devolver.php" method="post">
+                                    <input type="hidden" name="csrf_token"
+                                        value="<?= $_SESSION['csrf_token'] ?>">
+                                    <input type="hidden" name="id" value="<?= hh($id) ?>">
+                                    <button type="submit" class="bg-primary">devolver producto</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

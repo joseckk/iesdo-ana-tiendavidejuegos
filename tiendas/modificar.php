@@ -13,7 +13,6 @@
     require '../comunes/auxiliar.php';
 
     comprobar_admin();
-    head();
 
     $cod_postal = recoger_post('cod_postal');
     $loc = recoger_post('loc');
@@ -105,6 +104,7 @@
 
     <div class="container-fluid">
         <div class="row-md-12">
+            <?php head() ?>
             <div class="col-md-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
                             
@@ -118,32 +118,34 @@
     </div>
 
     <div class="container">
-        <form action="" method="post">
-            <div class="form-group mt-5 mr-5">
-                <label class="col-lg-4 control-label" for="cod_postal">Código postal:</label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="cod_postal" id="cod_postal" 
-                            value="<?= hh($cod_postal) ?>">
+        <div class="row-md-12">
+            <form action="" method="post">
+                <div class="form-group mt-5 mr-5">
+                    <label class="col-lg-4 control-label" for="cod_postal">Código postal:</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="cod_postal" id="cod_postal" 
+                                value="<?= hh($cod_postal) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="loc">Localidad:</label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="loc" id="loc"
-                            value="<?= hh($loc) ?>">
+                <div class="form-group mt-5">
+                    <label class="col-lg-4 control-label" for="loc">Localidad:</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="loc" id="loc"
+                                value="<?= hh($loc) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="tnombre">Nombre:</label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="tnombre" id="tnombre"
-                            value="<?= hh($tnombre) ?>">
+                <div class="form-group mt-5">
+                    <label class="col-lg-4 control-label" for="tnombre">Nombre:</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="tnombre" id="tnombre"
+                                value="<?= hh($tnombre) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <button type="submit" class="btn btn-primary mt-5">Modificar</button>
-            </div>
-        </form>
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-primary mt-5">Modificar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

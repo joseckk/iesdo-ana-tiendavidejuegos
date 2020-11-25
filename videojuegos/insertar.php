@@ -12,7 +12,6 @@
     <?php
     require '../comunes/auxiliar.php';
 
-    head();
     comprobar_admin();
 
 
@@ -197,6 +196,7 @@
 
     <div class="container-fluid">
         <div class="row-md-12">
+            <?php head() ?>
             <div class="col-md-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
                             
@@ -210,89 +210,91 @@
     </div>
 
     <div class="container">
-        <form action="" method="post">
-            <div class="form-group mt-5 mr-5">
-                <label class="col-lg-4 control-label" for="video_tipo">Tipo:</label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="video_tipo" id="video_tipo" 
-                            value="<?= hh($video_tipo) ?>">
+        <div class="row-md-12">
+            <form action="" method="post">
+                <div class="form-group mt-1 mr-5">
+                    <label class="col-lg-4 control-label" for="video_tipo">Tipo:</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="video_tipo" id="video_tipo" 
+                                value="<?= hh($video_tipo) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="vnombre">Nombre:</label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="vnombre" id="vnombre"
-                            value="<?= hh($vnombre) ?>">
+                <div class="form-group mt-1">
+                    <label class="col-lg-4 control-label" for="vnombre">Nombre:</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="vnombre" id="vnombre"
+                                value="<?= hh($vnombre) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="precio">Precio:</label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="precio" id="precio"
-                            value="<?= hh($precio) ?>">
+                <div class="form-group mt-1">
+                    <label class="col-lg-4 control-label" for="precio">Precio:</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="precio" id="precio"
+                                value="<?= hh($precio) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="pegi">Pegi:</label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="pegi" id="pegi"
-                            value="<?= hh($pegi) ?>">
+                <div class="form-group mt-1">
+                    <label class="col-lg-4 control-label" for="pegi">Pegi:</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="pegi" id="pegi"
+                                value="<?= hh($pegi) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="fecha_alt">Fecha de alta:</label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="fecha_alt" id="fecha_alt"
-                            value="<?= hh($fecha_alt_fmt) ?>">
+                <div class="form-group mt-1">
+                    <label class="col-lg-4 control-label" for="fecha_alt">Fecha de alta:</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="fecha_alt" id="fecha_alt"
+                                value="<?= hh($fecha_alt_fmt) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="fecha_baj">Fecha de baja:</label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="fecha_baj" id="fecha_baj"
-                            value="<?= hh($fecha_baj_fmt) ?>">
+                <div class="form-group mt-1">
+                    <label class="col-lg-4 control-label" for="fecha_baj">Fecha de baja:</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="fecha_baj" id="fecha_baj"
+                                value="<?= hh($fecha_baj_fmt) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="disponibilidad">Disponibilidad:</label>
-                <div class="col-lg-4">
-                    <select class="form-control" name="disponibilidad" id="disponibilidad">
-                        <option value="<?= '' ?>"></option>
-                        <option value= true >stock</option>
-                        <option value= false >sin fecha de entrada</option>
-                    </select>
+                <div class="form-group mt-1">
+                    <label class="col-lg-4 control-label" for="disponibilidad">Disponibilidad:</label>
+                    <div class="col-lg-4">
+                        <select class="form-control" name="disponibilidad" id="disponibilidad">
+                            <option value="<?= '' ?>"></option>
+                            <option value= true >stock</option>
+                            <option value= false >sin fecha de entrada</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="usuario_id">Usuario:</label>
-                <div class="col-lg-4">
-                    <select class="form-control" name="usuario_id" id="usuario_id">
-                        <option value="<?= '' ?>"></option>
-                        <?php foreach (lista_usuarios($pdo) as $key => $value) :?>
-                            <option value="<?= $key ?>" <?= selected($usuario_id, $key) ?>>
-                                <?= hh($value) ?>
-                            </option>
-                        <?php endforeach ?>
-                    </select>
+                <div class="form-group mt-1">
+                    <label class="col-lg-4 control-label" for="usuario_id">Usuario:</label>
+                    <div class="col-lg-4">
+                        <select class="form-control" name="usuario_id" id="usuario_id">
+                            <option value="<?= '' ?>"></option>
+                            <?php foreach (lista_usuarios($pdo) as $key => $value) :?>
+                                <option value="<?= $key ?>" <?= selected($usuario_id, $key) ?>>
+                                    <?= hh($value) ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="tienda_id">Tienda:</label>
-                <div class="col-lg-4">
-                    <select class="form-control" name="tienda_id" id="tienda_id">
-                        <option value="<?= '' ?>"></option>
-                        <?php foreach (lista_tiendas($pdo) as $key => $value) :?>
-                            <option value="<?= $key ?>" <?= selected($tienda_id, $key) ?>>
-                                <?= hh($value) ?>
-                            </option>
-                        <?php endforeach ?>
-                    </select>
+                <div class="form-group mt-1">
+                    <label class="col-lg-4 control-label" for="tienda_id">Tienda:</label>
+                    <div class="col-lg-4">
+                        <select class="form-control" name="tienda_id" id="tienda_id">
+                            <option value="<?= '' ?>"></option>
+                            <?php foreach (lista_tiendas($pdo) as $key => $value) :?>
+                                <option value="<?= $key ?>" <?= selected($tienda_id, $key) ?>>
+                                    <?= hh($value) ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <button type="submit" class="btn btn-primary mt-5">Insertar</button>
-            </div>
-        </form>
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-primary mt-1">Insertar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

@@ -13,7 +13,6 @@
     require '../comunes/auxiliar.php';
 
     comprobar_admin();
-    head();
 
     $login = recoger_post('login');
     $password = recoger_post('password');
@@ -84,6 +83,7 @@
 
     <div class="container-fluid">
         <div class="row-md-12">
+            <?php head() ?>
             <div class="col-md-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
                             
@@ -97,32 +97,34 @@
     </div>
 
     <div class="container">
-        <form action="" method="post">
-            <div class="form-group mt-5 mr-5">
-                <label class="col-lg-4 control-label" for="login">Nombre:</label>
-                <div class="col-lg-4">
-                    <input type="text" class="form-control" name="login" id="login" 
-                            value="<?= hh($login) ?>">
+        <div class="row-md-12">
+            <form action="" method="post">
+                <div class="form-group mt-5 mr-5">
+                    <label class="col-lg-4 control-label" for="login">Nombre:</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="login" id="login" 
+                                value="<?= hh($login) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="password">Contraseña:</label>
-                <div class="col-lg-4">
-                    <input type="password" class="form-control" name="password" id="password"
-                            value="<?= hh($password) ?>">
+                <div class="form-group mt-5">
+                    <label class="col-lg-4 control-label" for="password">Contraseña:</label>
+                    <div class="col-lg-4">
+                        <input type="password" class="form-control" name="password" id="password"
+                                value="<?= hh($password) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mt-5">
-                <label class="col-lg-4 control-label" for="crypt_password">Repite la contraseña:</label>
-                <div class="col-lg-4">
-                    <input type="password" class="form-control" name="crypt_password" id="crypt_password"
-                            value="<?= hh($crypt_password) ?>">
+                <div class="form-group mt-5">
+                    <label class="col-lg-4 control-label" for="crypt_password">Repite la contraseña:</label>
+                    <div class="col-lg-4">
+                        <input type="password" class="form-control" name="crypt_password" id="crypt_password"
+                                value="<?= hh($crypt_password) ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <button type="submit" class="btn btn-primary mt-5">Insertar</button>
-            </div>
-        </form>
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-primary mt-5">Insertar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
