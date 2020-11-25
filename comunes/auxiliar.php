@@ -160,6 +160,28 @@
         return $sent->fetchColumn() != 0;
     }
 
+    function mostrar_tabla($nombre, $patron, $parametro, $pdo)
+    {
+        if ($parametro == '') {
+            $sent = $pdo->query("SELECT * FROM $nombre");
+        } else {
+            if (ctype_digit($parametro)){
+                $patron_fmt = ':' . $patron;
+                $sent = $pdo->prepare("SELECT *
+                                         FROM $nombre
+                                        WHERE $patron = $patron_fmt
+                                     ORDER BY $patron");
+                $sent->execute([$patron => $parametro]);
+            } else {
+                $sent = $pdo->query("SELECT *
+                                       FROM $nombre
+                                      WHERE $patron LIKE '%$parametro%'
+                                   ORDER BY $patron");
+            }
+        }
+        return $sent;
+    }
+
     function selected($a, $b)
     {
         return ($a == $b) ? 'selected' : '';

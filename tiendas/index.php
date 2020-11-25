@@ -17,23 +17,29 @@
         $_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(32));
     }
 
-    $cod_postal = recoger_get('cod_postal');
+    $pdo = conectar();
 
-        $pdo = conectar();
+    const LISTA = [
+        '0' => [
+            'id' => '0',
+            'nombre' => 'Código postal',
+            'valor' => 'cod_postal',
+        ],
+        '1' => [
+            'id' => '1',
+            'nombre' => 'Localidad',
+            'valor' => 'loc'
+        ],
+        '2' => [
+            'id' => '2',
+            'nombre' => 'Nombre',
+            'valor' => 'tnombre'
+        ],
+    ];
 
-        if ($cod_postal == '') {
+    $val = recoger_get('val');
 
-            $sent = $pdo->query("SELECT * FROM tienda");
-
-        } else {
-
-            $sent = $pdo->prepare("SELECT *
-                                     FROM tienda
-                                    WHERE cod_postal = :cod_postal");
-            $sent->execute([':cod_postal' => $cod_postal]);
-
-        }
-    
+    $patron_id = recoger_get('patron_id');
     ?>
 
     <div class="container-fluid">
@@ -60,14 +66,29 @@
         <div class="row">
             <form class="form-inline" action="" method="get">
                 <div class="form-group mt-5 mr-5 mb-5">
-                    <label class="col-md-4 control-label ml-5 mr-1" for="cod_postal"><strong>Código postal:</strong></label>
-                    <input type="text" class="col-md-4 form-control ml-1 mr-3" name="cod_postal" id="cod_postal" 
-                            value="<?= hh($cod_postal) ?>">
+                    <label class="col-lg-4 control-label ml-5 mr-1" for="patron_id"><strong>Patrón de busqueda:</strong></label>
+                    <div class="col-lg-4">
+                        <select class="form-control" name="patron_id" id="patron_id">
+                            <option value="<?= '' ?>"></option>
+                            <?php foreach (LISTA as $key => $value) :?>
+                                <option value="<?= $key ?>" <?= selected($patron_id, $key) ?>>
+                                    <?= hh($value['nombre']) ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                        <input type="text" class="col-md-8 form-control mt-2 mr-3" name="val" id="val" 
+                            value="<?= hh($val) ?>">
+                    </div>
                     <button type="submit" class="btn btn-primary">buscar</button>
                 </div>
             </form>
         </div>
 
+        <?php 
+            $k = LISTA[$patron_id]['valor'];            
+                                            
+            $sent = mostrar_tabla('tienda', $k, $val, $pdo); 
+        ?>
 
         <div class="row-md-12">
             <table class="table table-hover table-bordered text-center">
