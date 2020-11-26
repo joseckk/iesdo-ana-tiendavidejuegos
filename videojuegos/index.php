@@ -121,7 +121,12 @@
                                               
                 $sent = mostrar_tabla('videojuego', $k, $val, $pdo);
 
-                if ($sent == null || $sent->rowCount() == 0) {
+                if ($sent == null || $sent->rowCount() == 0) {?>
+                <div class="row ml-5">
+                    <div class="alert alert-success" role="alert">
+                            No se encuentran coincidencias
+                    </div>
+                </div><?php
                     return;
                 }
             }

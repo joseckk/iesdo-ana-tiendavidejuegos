@@ -85,11 +85,24 @@
         </div>
 
         <?php
-            $patron_id ?? $patron_id = 0 ;
-            
-            $k = LISTA[$patron_id]['valor'];            
-                                            
-            $sent = mostrar_tabla('tienda', $k, $val, $pdo); 
+            if ($patron_id == '') {
+                $sent = mostrar_tabla('tienda', '', $val, $pdo); 
+            } else {
+                $patron_id ?? $patron_id = 0 ;
+
+                $k = LISTA[$patron_id]['valor'];            
+                                              
+                $sent = mostrar_tabla('tienda', $k, $val, $pdo);
+
+                if ($sent == null || $sent->rowCount() == 0) {?>
+                <div class="row ml-5">
+                    <div class="alert alert-success" role="alert">
+                            No se encuentran coincidencias
+                    </div>
+                </div><?php
+                    return;
+                }
+            }
         ?>
 
         <div class="row-md-12">

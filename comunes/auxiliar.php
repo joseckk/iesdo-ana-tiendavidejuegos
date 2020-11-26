@@ -185,13 +185,38 @@
             $parametro_valido = true;
             $sent = $pdo->query("SELECT * FROM $nombre");
         } else {
-            if ($patron == 'video_tipo' || $patron == 'vnombre') {
+            if ($patron == 'loc' || $patron == 'tnombre' 
+                || $patron == 'video_tipo' || $patron == 'vnombre') {
+
                 $parametro_valido = true;
             }
 
-            if ($patron == 'precio' || $patron == 'pegi') {
+            if ($patron == 'precio' || $patron == 'pegi' 
+                    || $patron == 'cod_postal') {
+
                 if (is_numeric($parametro)) {
                     $parametro_valido = true;
+                }
+            }
+
+            if ($patron == 'fecha_alt' || $patron == 'fecha_baj') {
+                $matches = [];
+                
+                if (!preg_match(
+                    '/^(\d\d)-(\d\d)-(\d{4})$/',
+                    $parametro, $matches
+                )) {
+                    $parametro_valido = false;
+                } else {
+                    $dia = $matches[1];
+                    $mes = $matches[2];
+                    $anyo = $matches[3];
+                    if (!checkdate($mes, $dia, $anyo)) {
+                        $parametro_valido = false;
+                    } else {
+                        $parametro = "$anyo-$mes-$dia";
+                        $parametro_valido = true;
+                    }
                 }
             }
 
@@ -211,10 +236,7 @@
                 $parametro = intval(encontrar_tienda($parametro, $pdo));
                 $parametro_valido = true;
             }
-            
-            
         }
-
 
         if ($parametro_valido == true) {
             if (is_numeric($parametro)){
@@ -225,10 +247,17 @@
                 $sent->execute([$patron => $parametro]);
             } else {
                 if ($parametro != '') {
-                    $sent = $pdo->query("SELECT *
-                                           FROM $nombre
-                                          WHERE $patron LIKE '%$parametro%'
-                                       ORDER BY $patron");
+                    if ($patron == 'fecha_alt' || $patron == 'fecha_baj') {
+                        $sent = $pdo->query("SELECT *
+                                               FROM $nombre
+                                              WHERE $patron = '$parametro'
+                                           ORDER BY $patron");
+                    } else {
+                        $sent = $pdo->query("SELECT *
+                                               FROM $nombre
+                                              WHERE $patron LIKE '%$parametro%'
+                                           ORDER BY $patron");
+                    }
                 }
             }
             return $sent;
