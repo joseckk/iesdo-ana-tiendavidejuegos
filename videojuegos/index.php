@@ -64,9 +64,8 @@
     ];
     
     $val = recoger_get('val');
-
-    $patron_id = recoger_get('patron_id');
-    
+    $patron_id = recoger_get('patron_id') ?? 0 ;
+    $pag = recoger_get('pag') ?? 1;
     ?>
 
     <div class="container-fluid">
@@ -111,17 +110,25 @@
             </form>
         </div>
 
-        <?php  
+        <?php
+            $k = LISTA[$patron_id]['valor'];
+            $sent2 = contar_filas('videojuego', $k, $val, $pdo);
+            if ($sent2 == null) {?>
+                <div class="row ml-5">
+                    <div class="alert alert-success" role="alert">
+                            No se encuentran coincidencias
+                    </div>
+                </div><?php
+                return;
+            }
+            $nfilas = $sent2->fetchColumn();
+            $npags = ceil($nfilas / FPP); 
             if ($patron_id == '') {
-                $sent = mostrar_tabla('videojuego', '', $val, $pdo); 
+                $sent = mostrar_tabla('videojuego', 'video_tipo', $val, $pag, $pdo); 
             } else {
-                $patron_id ?? $patron_id = 0 ;
+                $sent = mostrar_tabla('videojuego', $k, $val, $pag, $pdo);
 
-                $k = LISTA[$patron_id]['valor'];            
-                                              
-                $sent = mostrar_tabla('videojuego', $k, $val, $pdo);
-
-                if ($sent == null || $sent->rowCount() == 0) {?>
+                if ($sent == null || $nfilas == 0) {?>
                 <div class="row ml-5">
                     <div class="alert alert-success" role="alert">
                             No se encuentran coincidencias
@@ -206,6 +213,7 @@
         </div>
     </div>
 
+    <?php paginador($pag, $npags, "&patron_id=$patron_id&val=$val") ?>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

@@ -1,5 +1,7 @@
 <?php
 
+    const FPP = 3;
+
     function banner() 
     {
         if (!isset($_COOKIE['acepta_cookies'])) {?>
@@ -93,8 +95,8 @@
     {
         $sent = $pdo->prepare('SELECT id AS t_id 
                                  FROM tienda 
-                                WHERE tnombre = :tnombre');
-        $sent->execute(['tnombre' => $tnombre]);
+                                WHERE upper(tnombre) LIKE upper(:tnombre)');
+        $sent->execute(['tnombre' => "%$tnombre%"]);
 
         $fila = $sent->fetch();
 
@@ -177,13 +179,68 @@
         return $sent->fetchColumn() != 0;
     }
 
-    function mostrar_tabla($nombre, $patron, $parametro, $pdo)
-    {   
+    function paginador($pag, $npags, $params)
+    { ?>
+        <div class="row">
+            <div class="col">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <?php if ($pag > 1): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?pag=<?= ($pag - 1) . "$params" ?>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        <?php else: ?>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        <?php endif ?>
+                        <?php for ($i = 1; $i <= $npags; $i++): ?>
+                            <?php if ($pag == $i): ?>
+                                <li class="page-item active">
+                                    <span class="page-link">
+                                        <?= $i ?>
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                            <?php else: ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?pag=<?= "$i$params" ?>">
+                                        <?= $i ?>
+                                    </a>
+                                </li>
+                            <?php endif ?>
+                        <?php endfor ?>
+                        <?php if ($pag < $npags): ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?pag=<?= ($pag + 1) . "$params" ?>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        <?php else: ?>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        <?php endif ?>
+                    </ul>
+                </nav>
+            </div>
+        </div><?php
+    }
+
+    function contar_filas($nombre, $patron, $parametro, $pdo)
+    {
         $parametro_valido = false;
+        $sent = null;
 
         if ($patron == '' || $parametro == '') {
             $parametro_valido = true;
-            $sent = $pdo->query("SELECT * FROM $nombre");
+            $sent = $pdo->query("SELECT COUNT(*) FROM $nombre");
         } else {
             if ($patron == 'loc' || $patron == 'tnombre' 
                 || $patron == 'video_tipo' || $patron == 'vnombre') {
@@ -236,27 +293,136 @@
                 $parametro = intval(encontrar_tienda($parametro, $pdo));
                 $parametro_valido = true;
             }
-        }
 
-        if ($parametro_valido == true) {
-            if (is_numeric($parametro)){
-                $patron_fmt = ':' . $patron;
-                $sent = $pdo->prepare("SELECT *
-                                         FROM $nombre
-                                        WHERE $patron = $patron_fmt");
-                $sent->execute([$patron => $parametro]);
-            } else {
-                if ($parametro != '') {
+            if ($parametro_valido == true) {
+                if (is_numeric($parametro)) {
+                    $patron_fmt = ':' . $patron;
+                    $sent = $pdo->prepare("SELECT COUNT(*)
+                                             FROM $nombre
+                                            WHERE $patron = $patron_fmt");
+                    $sent->execute([$patron => $parametro]);
+                } else {
                     if ($patron == 'fecha_alt' || $patron == 'fecha_baj') {
-                        $sent = $pdo->query("SELECT *
-                                               FROM $nombre
-                                              WHERE $patron = '$parametro'
-                                           ORDER BY $patron");
+                        $patron_fmt = ':' . $patron;
+                        $sent = $pdo->prepare("SELECT COUNT(*)
+                                                 FROM $nombre
+                                                WHERE $patron = $patron_fmt");
+                        $sent->execute([$patron => $parametro]);
                     } else {
-                        $sent = $pdo->query("SELECT *
-                                               FROM $nombre
-                                              WHERE $patron LIKE '%$parametro%'
-                                           ORDER BY $patron");
+                        $patron_fmt = ':' . $patron;
+                        $sent = $pdo->prepare("SELECT COUNT(*)
+                                                 FROM $nombre
+                                                WHERE upper($patron) LIKE upper($patron_fmt)");
+                        $sent->execute([$patron => "%$parametro%"]);
+                    }
+                }
+            }
+        }
+        return $sent;
+    }
+
+    function mostrar_tabla($nombre, $patron, $parametro, $pag, $pdo)
+    {   
+        $parametro_valido = false;
+        $sent = null;
+        $limit = FPP;
+        $offset = FPP * ($pag - 1);
+
+        if ($parametro == '') {
+
+            $sent = $pdo->query("SELECT * 
+                                   FROM $nombre
+                               ORDER BY $patron
+                                  LIMIT $limit
+                                 OFFSET $offset");
+            return $sent;
+            
+        } else {
+            if ($patron == 'loc' || $patron == 'tnombre' 
+                || $patron == 'video_tipo' || $patron == 'vnombre') {
+
+                $parametro_valido = true;
+            }
+
+            if ($patron == 'precio' || $patron == 'pegi' 
+                    || $patron == 'cod_postal') {
+
+                if (is_numeric($parametro)) {
+                    $parametro_valido = true;
+                }
+            }
+
+            if ($patron == 'fecha_alt' || $patron == 'fecha_baj') {
+                $matches = [];
+                
+                if (!preg_match(
+                    '/^(\d\d)-(\d\d)-(\d{4})$/',
+                    $parametro, $matches
+                )) {
+                    $parametro_valido = false;
+                } else {
+                    $dia = $matches[1];
+                    $mes = $matches[2];
+                    $anyo = $matches[3];
+                    if (!checkdate($mes, $dia, $anyo)) {
+                        $parametro_valido = false;
+                    } else {
+                        $parametro = "$anyo-$mes-$dia";
+                        $parametro_valido = true;
+                    }
+                }
+            }
+
+            if ($patron == 'disponibilidad') {
+                if ($parametro == 'stock') {
+                    $parametro = 1;
+                    $parametro_valido = true;
+                } else {
+                    if ($parametro == 'sin fecha de entrada') {
+                        $parametro = 0;
+                        $parametro_valido = true;
+                    }
+                }
+            }
+
+            if ($patron == 'tienda_id') {
+                if (encontrar_tienda($parametro, $pdo) != null) {
+                    $parametro = intval(encontrar_tienda($parametro, $pdo));
+                    $parametro_valido = true;
+                }
+            }
+
+            if ($parametro_valido == true) {
+                if (is_numeric($parametro)){
+                    $patron_fmt = ':' . $patron;
+                    $sent = $pdo->prepare("SELECT *
+                                             FROM $nombre
+                                            WHERE $patron = $patron_fmt
+                                         ORDER BY $patron
+                                            LIMIT $limit
+                                           OFFSET $offset");
+                    $sent->execute([$patron => $parametro]);
+                } else {
+                        
+                    if ($patron == 'fecha_alt' || $patron == 'fecha_baj') {
+                        $patron_fmt = ':' . $patron;
+                        $sent = $pdo->prepare("SELECT *
+                                                 FROM $nombre
+                                                WHERE $patron = $patron_fmt
+                                             ORDER BY $patron
+                                                LIMIT $limit
+                                               OFFSET $offset");
+                        $sent->execute([$patron => $parametro]);
+
+                    } else {
+                        $patron_fmt = ':' . $patron;
+                        $sent = $pdo->prepare("SELECT *
+                                                 FROM $nombre
+                                                WHERE upper($patron) LIKE upper($patron_fmt)
+                                             ORDER BY $patron
+                                                LIMIT $limit
+                                               OFFSET $offset");
+                        $sent->execute([$patron => "%$parametro%"]);
                     }
                 }
             }
@@ -310,7 +476,7 @@
         foreach ($error as $key => $array) {
             foreach ($array as $value) {?>
                 <div class="row ml-5">
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-danger mt-2" role="alert">
                             <?= $value ?>
                     </div>
                 </div><?php
