@@ -87,30 +87,33 @@
         </div>
 
         <?php
+            if ($patron_id == '') {
+                $sent = mostrar_tabla('tienda', 'cod_postal', $val, $pag, $pdo);
+                $patron_id = 0;
+            }
+
             $k = LISTA[$patron_id]['valor'];
             $sent2 = contar_filas('tienda', $k, $val, $pdo);
             $nfilas = $sent2->fetchColumn();
             $npags = ceil($nfilas / FPP);
-
+            
+            
             if ($patron != null && $criterio != null) {
                 $k = $patron . ' ' . $criterio;
-            
+                
                 $sent = mostrar_tabla('tienda', $k, $val, $pag, $pdo);
-
+    
                 if ($sent == null || $nfilas == 0) {?>
-                <div class="row ml-5">
-                    <div class="alert alert-success" role="alert">
-                            No se encuentran coincidencias
-                    </div>
-                </div><?php
+                    <div class="row ml-5">
+                        <div class="alert alert-success" role="alert">
+                                No se encuentran coincidencias
+                        </div>
+                    </div><?php
                 return;
                 }
-            } else {
-                if ($patron_id == '') {
-                    $sent = mostrar_tabla('tienda', 'cod_postal', $val, $pag, $pdo); 
-                } else {                  
+            } elseif ($patron_id != '') {
                     $sent = mostrar_tabla('tienda', $k, $val, $pag, $pdo);
-    
+        
                     if ($sent == null || $nfilas == 0) {?>
                         <div class="row ml-5">
                             <div class="alert alert-success" role="alert">
@@ -119,17 +122,20 @@
                         </div><?php
                         return;
                     }
-                }
             }
+            
         ?>
 
         <div class="row-md-12">
             <table class="table table-hover table-bordered text-center">
                 <thead class="thead-dark">
                     <form action="" method="get">
-                        <th scope="col"><a href="?patron=<?= hh('cod_postal') ?>&criterio=<?= criterio_ordenacion($criterio)?>">CÓDIGO POSTAL</th>
-                        <th scope="col"><a href="?patron=<?= hh('loc') ?>&criterio=<?= criterio_ordenacion($criterio)?>">LOCALIDAD</th>
-                        <th scope="col"><a href="?patron=<?= hh('tnombre') ?>&criterio=<?= criterio_ordenacion($criterio)?>">NOMBRE</th>
+                        <th scope="col"><a href="?patron=<?= 'cod_postal' ?>
+                                &criterio=<?= criterio_ordenacion($criterio) ?>">CÓDIGO POSTAL</th>
+                        <th scope="col"><a href="?patron=<?= 'loc' ?>
+                                &criterio=<?= criterio_ordenacion($criterio) ?>">LOCALIDAD</th>
+                        <th scope="col"><a href="?patron=<?= 'tnombre' ?>
+                                &criterio=<?= criterio_ordenacion($criterio) ?>">NOMBRE</th>
                     </form>
                     <th scope="col">ACCIONES</th>
                 </thead>

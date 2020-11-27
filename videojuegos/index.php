@@ -66,6 +66,8 @@
     $val = recoger_get('val');
     $patron_id = recoger_get('patron_id') ?? 0 ;
     $pag = recoger_get('pag') ?? 1;
+    $patron = recoger_get('patron');
+    $criterio = recoger_get('criterio');
     ?>
 
     <div class="container-fluid">
@@ -111,8 +113,14 @@
         </div>
 
         <?php
+            if ($patron_id == '') {
+                $sent = mostrar_tabla('videojuego', 'video_tipo', $val, $pag, $pdo);
+                $patron_id = 0; 
+            }
+
             $k = LISTA[$patron_id]['valor'];
             $sent2 = contar_filas('videojuego', $k, $val, $pdo);
+
             if ($sent2 == null) {?>
                 <div class="row ml-5">
                     <div class="alert alert-success" role="alert">
@@ -121,11 +129,13 @@
                 </div><?php
                 return;
             }
+
             $nfilas = $sent2->fetchColumn();
-            $npags = ceil($nfilas / FPP); 
-            if ($patron_id == '') {
-                $sent = mostrar_tabla('videojuego', 'video_tipo', $val, $pag, $pdo); 
-            } else {
+            $npags = ceil($nfilas / FPP);
+            
+            if ($patron != null && $criterio != null) {
+                $k = $patron . ' ' . $criterio;
+            
                 $sent = mostrar_tabla('videojuego', $k, $val, $pag, $pdo);
 
                 if ($sent == null || $nfilas == 0) {?>
@@ -134,6 +144,17 @@
                             No se encuentran coincidencias
                     </div>
                 </div><?php
+                return;
+                }
+            } else {
+                $sent = mostrar_tabla('videojuego', $k, $val, $pag, $pdo);
+
+                if ($sent == null || $nfilas == 0) {?>
+                    <div class="row ml-5">
+                        <div class="alert alert-success" role="alert">
+                                No se encuentran coincidencias
+                        </div>
+                    </div><?php
                     return;
                 }
             }
@@ -142,14 +163,24 @@
         <div class="row-md-12">
             <table class="table table-hover table-bordered text-center">
                 <thead class="thead-dark">
-                    <th scope="col">TIPO</th>
-                    <th scope="col">NOMBRE</th>
-                    <th scope="col">PRECIO</th>
-                    <th scope="col">PEGI</th>
-                    <th scope="col">FECHA DE ALTA</th>
-                    <th scope="col">FECHA DE BAJA</th>
-                    <th scope="col">DISPONIBILIDAD</th>
-                    <th scope="col">TIENDA</th>
+                    <form action="" method="get">
+                        <th scope="col"><a href="?patron=<?= 'video_tipo' ?>
+                                &criterio=<?= criterio_ordenacion($criterio) ?>">TIPO</th>
+                        <th scope="col"><a href="?patron=<?= 'vnombre' ?>
+                                &criterio=<?= criterio_ordenacion($criterio) ?>">NOMBRE</th>
+                        <th scope="col"><a href="?patron=<?= 'precio' ?>
+                                &criterio=<?= criterio_ordenacion($criterio) ?>">PRECIO</th>
+                        <th scope="col"><a href="?patron=<?= 'pegi' ?>
+                                &criterio=<?= criterio_ordenacion($criterio) ?>">PEGI</th>
+                        <th scope="col"><a href="?patron=<?= 'fecha_alt' ?>
+                                &criterio=<?= criterio_ordenacion($criterio) ?>">FECHA DE ALTA</th>
+                        <th scope="col"><a href="?patron=<?= 'fecha_baj' ?>
+                                &criterio=<?= criterio_ordenacion($criterio) ?>">FECHA DE BAJA</th>
+                        <th scope="col"><a href="?patron=<?= 'disponibilidad' ?>
+                                &criterio=<?= criterio_ordenacion($criterio) ?>">DISPONIBILIDAD</th>
+                        <th scope="col"><a href="?patron=<?= 'tienda_id' ?>
+                                &criterio=<?= criterio_ordenacion($criterio)?>">TIENDA</th>
+                    </form>
                     <th scope="col">ACCIONES</th>
                 </thead>
                 <tbody>

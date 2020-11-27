@@ -237,9 +237,9 @@
     {
         $parametro_valido = false;
         $sent = null;
-        if ($patron == '' || $parametro == '') {
-            $parametro_valido = true;
+        if ($parametro == '') {
             $sent = $pdo->query("SELECT COUNT(*) FROM $nombre");
+            return $sent;
         } else {
             if ($patron == 'loc' || $patron == 'tnombre' 
                 || $patron == 'video_tipo' || $patron == 'vnombre') {
@@ -284,9 +284,11 @@
                     }
                 }
             }
-            if (encontrar_tienda($parametro, $pdo) != null) {
-                $parametro = intval(encontrar_tienda($parametro, $pdo));
-                $parametro_valido = true;
+            if ($patron == 'tienda_id') {
+                if (encontrar_tienda($parametro, $pdo) != null) {
+                    $parametro = intval(encontrar_tienda($parametro, $pdo));
+                    $parametro_valido = true;
+                }
             }
             if ($parametro_valido == true) {
                 if (is_numeric($parametro)) {
@@ -321,6 +323,7 @@
         $sent = null;
         $limit = FPP;
         $offset = FPP * ($pag - 1);
+
         if ($parametro == '') {
             $sent = $pdo->query("SELECT * 
                                    FROM $nombre
@@ -411,8 +414,8 @@
                     }
                 }
             }
-            return $sent;
         }
+        return $sent;
     }
 
     function criterio_ordenacion($a)
