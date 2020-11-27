@@ -40,6 +40,8 @@
     $val = recoger_get('val');
     $patron_id = recoger_get('patron_id') ?? 0 ;
     $pag = recoger_get('pag') ?? 1;
+    $patron = recoger_get('patron');
+    $criterio = recoger_get('criterio');
     ?>
 
     <div class="container-fluid">
@@ -85,23 +87,38 @@
         </div>
 
         <?php
-        
             $k = LISTA[$patron_id]['valor'];
             $sent2 = contar_filas('tienda', $k, $val, $pdo);
             $nfilas = $sent2->fetchColumn();
             $npags = ceil($nfilas / FPP);
-            if ($patron_id == '') {
-                $sent = mostrar_tabla('tienda', 'cod_postal', $val, $pag, $pdo); 
-            } else {                                
+
+            if ($patron != null && $criterio != null) {
+                $k = $patron . ' ' . $criterio;
+            
                 $sent = mostrar_tabla('tienda', $k, $val, $pag, $pdo);
 
                 if ($sent == null || $nfilas == 0) {?>
-                    <div class="row ml-5">
-                        <div class="alert alert-success" role="alert">
-                                No se encuentran coincidencias
-                        </div>
-                    </div><?php
-                    return;
+                <div class="row ml-5">
+                    <div class="alert alert-success" role="alert">
+                            No se encuentran coincidencias
+                    </div>
+                </div><?php
+                return;
+                }
+            } else {
+                if ($patron_id == '') {
+                    $sent = mostrar_tabla('tienda', 'cod_postal', $val, $pag, $pdo); 
+                } else {                  
+                    $sent = mostrar_tabla('tienda', $k, $val, $pag, $pdo);
+    
+                    if ($sent == null || $nfilas == 0) {?>
+                        <div class="row ml-5">
+                            <div class="alert alert-success" role="alert">
+                                    No se encuentran coincidencias
+                            </div>
+                        </div><?php
+                        return;
+                    }
                 }
             }
         ?>
@@ -109,9 +126,11 @@
         <div class="row-md-12">
             <table class="table table-hover table-bordered text-center">
                 <thead class="thead-dark">
-                    <th scope="col">CÓDIGO POSTAL</th>
-                    <th scope="col">LOCALIDAD</th>
-                    <th scope="col">NOMBRE</th>
+                    <form action="" method="get">
+                        <th scope="col"><a href="?patron=<?= hh('cod_postal') ?>&criterio=<?= criterio_ordenacion($criterio)?>">CÓDIGO POSTAL</th>
+                        <th scope="col"><a href="?patron=<?= hh('loc') ?>&criterio=<?= criterio_ordenacion($criterio)?>">LOCALIDAD</th>
+                        <th scope="col"><a href="?patron=<?= hh('tnombre') ?>&criterio=<?= criterio_ordenacion($criterio)?>">NOMBRE</th>
+                    </form>
                     <th scope="col">ACCIONES</th>
                 </thead>
                 <tbody>

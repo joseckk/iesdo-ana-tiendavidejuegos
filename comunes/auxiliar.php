@@ -181,8 +181,8 @@
 
     function paginador($pag, $npags, $params)
     { ?>
-        <div class="row">
-            <div class="col">
+        <div class="row-md-12">
+            <div class="col-md-12">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         <?php if ($pag > 1): ?>
@@ -237,7 +237,6 @@
     {
         $parametro_valido = false;
         $sent = null;
-
         if ($patron == '' || $parametro == '') {
             $parametro_valido = true;
             $sent = $pdo->query("SELECT COUNT(*) FROM $nombre");
@@ -247,7 +246,6 @@
 
                 $parametro_valido = true;
             }
-
             if ($patron == 'precio' || $patron == 'pegi' 
                     || $patron == 'cod_postal') {
 
@@ -255,7 +253,6 @@
                     $parametro_valido = true;
                 }
             }
-
             if ($patron == 'fecha_alt' || $patron == 'fecha_baj') {
                 $matches = [];
                 
@@ -276,7 +273,6 @@
                     }
                 }
             }
-
             if ($patron == 'disponibilidad') {
                 if ($parametro == 'stock') {
                     $parametro = 1;
@@ -288,12 +284,10 @@
                     }
                 }
             }
-
             if (encontrar_tienda($parametro, $pdo) != null) {
                 $parametro = intval(encontrar_tienda($parametro, $pdo));
                 $parametro_valido = true;
             }
-
             if ($parametro_valido == true) {
                 if (is_numeric($parametro)) {
                     $patron_fmt = ':' . $patron;
@@ -327,23 +321,19 @@
         $sent = null;
         $limit = FPP;
         $offset = FPP * ($pag - 1);
-
         if ($parametro == '') {
-
             $sent = $pdo->query("SELECT * 
                                    FROM $nombre
                                ORDER BY $patron
                                   LIMIT $limit
                                  OFFSET $offset");
             return $sent;
-            
         } else {
             if ($patron == 'loc' || $patron == 'tnombre' 
                 || $patron == 'video_tipo' || $patron == 'vnombre') {
 
                 $parametro_valido = true;
             }
-
             if ($patron == 'precio' || $patron == 'pegi' 
                     || $patron == 'cod_postal') {
 
@@ -351,7 +341,6 @@
                     $parametro_valido = true;
                 }
             }
-
             if ($patron == 'fecha_alt' || $patron == 'fecha_baj') {
                 $matches = [];
                 
@@ -372,7 +361,6 @@
                     }
                 }
             }
-
             if ($patron == 'disponibilidad') {
                 if ($parametro == 'stock') {
                     $parametro = 1;
@@ -384,14 +372,12 @@
                     }
                 }
             }
-
             if ($patron == 'tienda_id') {
                 if (encontrar_tienda($parametro, $pdo) != null) {
                     $parametro = intval(encontrar_tienda($parametro, $pdo));
                     $parametro_valido = true;
                 }
             }
-
             if ($parametro_valido == true) {
                 if (is_numeric($parametro)){
                     $patron_fmt = ':' . $patron;
@@ -403,7 +389,6 @@
                                            OFFSET $offset");
                     $sent->execute([$patron => $parametro]);
                 } else {
-                        
                     if ($patron == 'fecha_alt' || $patron == 'fecha_baj') {
                         $patron_fmt = ':' . $patron;
                         $sent = $pdo->prepare("SELECT *
@@ -430,6 +415,10 @@
         }
     }
 
+    function criterio_ordenacion($a)
+    {
+        return ($a == 'ASC') ? 'DESC' : 'ASC';
+    }
     function selected($a, $b)
     {
         return ($a == $b) ? 'selected' : '';
